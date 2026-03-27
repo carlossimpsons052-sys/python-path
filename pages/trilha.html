@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trilha — PythonPath</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="logo">Python<span>Path</span></a>
+    <ul class="nav-links">
+      <li><a href="trilha.html">Trilha</a></li>
+      <li><a href="desafios.html">Desafios</a></li>
+      <li><a href="projetos.html">Projetos</a></li>
+      <li><a href="analisar.html">Analisar PDF</a></li>
+    </ul>
+    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Abrir menu">☰</button>
+  </nav>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <p class="eyebrow">// trilha de aprendizado</p>
+      <h1 class="page-title">Sua jornada Python</h1>
+      <p class="page-sub">
+        Cada módulo tem contexto de uso real — por que isso importa no mundo real,
+        não só "o que é". Trilha baseada no <a href="https://roadmap.sh/python" target="_blank" rel="noopener" style="color:var(--yellow)">roadmap.sh/python</a>.
+      </p>
+
+      <div class="tabs" role="tablist" aria-label="Nível de aprendizado">
+        <button class="tab active" role="tab" aria-selected="true"  onclick="setLevel('iniciante', this)">🌱 Iniciante</button>
+        <button class="tab"        role="tab" aria-selected="false" onclick="setLevel('intermediario', this)">⚡ Intermediário</button>
+        <button class="tab"        role="tab" aria-selected="false" onclick="setLevel('avancado', this)">🔥 Avançado</button>
+        <button class="tab"        role="tab" aria-selected="false" onclick="setLevel('expert', this)">👑 Expert</button>
+      </div>
+
+      <div class="modules-grid" id="modules-grid" role="list"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>PythonPath — feito com 🐍 e ☕ &nbsp;|&nbsp;
+      <a href="https://roadmap.sh/python" target="_blank" rel="noopener">roadmap.sh/python</a>
+    </p>
+  </footer>
+
+  <!-- AI Widget -->
+  <div class="ai-float">
+    <button class="ai-toggle" onclick="toggleAI()" aria-label="Abrir PyBot">🤖</button>
+    <div class="ai-panel" id="ai-panel" role="dialog">
+      <div class="ai-head">
+        <div class="ai-av">🐍</div>
+        <div><div class="ai-name">PyBot</div><div class="ai-online">● online</div></div>
+      </div>
+      <div class="ai-msgs" id="ai-msgs" aria-live="polite">
+        <div class="ai-msg bot">Oi! Tem dúvida sobre algum módulo da trilha? Me pergunte!</div>
+      </div>
+      <div class="ai-input-row">
+        <input type="text" class="ai-input" id="ai-inp" placeholder="Dúvida sobre Python..." />
+        <button class="ai-send" onclick="sendAI()">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script>
+    let currentLevel = 'iniciante';
+
+    function setLevel(level, btn) {
+      currentLevel = level;
+      document.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      render();
+    }
+
+    function render() {
+      const grid = document.getElementById('modules-grid');
+      const mods = PP.MODULES[currentLevel] || [];
+      grid.innerHTML = mods.map(m => `
+        <article class="mod-card" role="listitem">
+          <div class="mod-num">Módulo ${m.num}</div>
+          <span class="mod-icon" aria-hidden="true">${m.icon}</span>
+          <h2 class="mod-title">${m.title}</h2>
+          <p class="mod-desc">${m.desc}</p>
+          <div class="tags">${m.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+          <div class="mod-real"><strong>🎯 Uso real:</strong> ${m.real}</div>
+        </article>
+      `).join('');
+    }
+
+    render();
+  </script>
+</body>
+</html>

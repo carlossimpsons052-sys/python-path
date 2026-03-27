@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analisar PDF — PythonPath</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="logo">Python<span>Path</span></a>
+    <ul class="nav-links">
+      <li><a href="trilha.html">Trilha</a></li>
+      <li><a href="desafios.html">Desafios</a></li>
+      <li><a href="projetos.html">Projetos</a></li>
+      <li><a href="analisar.html">Analisar PDF</a></li>
+    </ul>
+    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Abrir menu">☰</button>
+  </nav>
+
+  <main class="page-wrapper">
+    <div class="container" style="max-width: 760px">
+      <p class="eyebrow">// análise de conteúdo por IA</p>
+      <h1 class="page-title">Analise seu material</h1>
+      <p class="page-sub">
+        Envie qualquer doc de estudo Python em PDF. A IA lê, identifica lacunas,
+        desatualizações e monta um plano de estudos personalizado.
+      </p>
+
+      <!-- API Key -->
+      <div class="api-key-bar" role="form" aria-label="Configuração da API key">
+        <input
+          type="password"
+          id="key-input"
+          placeholder="sk-ant-... (sua Anthropic API key)"
+          aria-label="Anthropic API key"
+        />
+        <button class="btn btn-secondary btn-sm" onclick="saveKey()">Salvar key</button>
+        <span class="key-status" id="key-status">⬤ sem key</span>
+      </div>
+
+      <details style="margin-bottom:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:0.75rem 1rem;font-size:0.82rem;color:var(--text2)">
+        <summary style="cursor:pointer;font-weight:600;color:var(--text)">Como obter minha API key da Anthropic?</summary>
+        <ol style="margin-top:.75rem;padding-left:1.2rem;display:flex;flex-direction:column;gap:.4rem;line-height:1.6">
+          <li>Acesse <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--yellow)">console.anthropic.com</a></li>
+          <li>Crie uma conta (tem free tier)</li>
+          <li>Vá em <strong>API Keys</strong> → <strong>Create Key</strong></li>
+          <li>Cole a key no campo acima e clique em "Salvar key"</li>
+        </ol>
+        <p style="margin-top:.75rem;color:var(--text3);font-family:var(--font-mono);font-size:.72rem">
+          ⚠️ A key é salva apenas no seu navegador (localStorage). Nunca enviada para servidores do PythonPath.
+        </p>
+      </details>
+
+      <!-- Drop Zone -->
+      <div
+        class="drop-zone"
+        id="drop-zone"
+        role="button"
+        tabindex="0"
+        aria-label="Área de upload de PDF — clique ou arraste um arquivo"
+        onclick="document.getElementById('file-input').click()"
+        ondrop="handleDrop(event)"
+        ondragover="handleDragOver(event)"
+        ondragleave="handleDragLeave()"
+      >
+        <span class="drop-zone-icon" aria-hidden="true">📄</span>
+        <h3>Solte seu PDF aqui ou clique para selecionar</h3>
+        <p>Qualquer doc de estudo Python — anotações, apostilas, exports do Notion</p>
+        <button class="btn btn-primary" style="margin-top:1.2rem" onclick="event.stopPropagation(); document.getElementById('file-input').click()">
+          Selecionar arquivo
+        </button>
+      </div>
+
+      <input
+        type="file"
+        id="file-input"
+        accept=".pdf"
+        style="display:none"
+        aria-hidden="true"
+        onchange="handleFile(this.files[0])"
+      />
+
+      <!-- Result -->
+      <div class="pdf-result" id="pdf-result" aria-live="polite"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>PythonPath — feito com 🐍 e ☕</p>
+  </footer>
+
+  <!-- AI Widget -->
+  <div class="ai-float">
+    <button class="ai-toggle" onclick="toggleAI()" aria-label="Abrir PyBot">🤖</button>
+    <div class="ai-panel" id="ai-panel" role="dialog">
+      <div class="ai-head">
+        <div class="ai-av">🐍</div>
+        <div><div class="ai-name">PyBot</div><div class="ai-online">● online</div></div>
+      </div>
+      <div class="ai-msgs" id="ai-msgs" aria-live="polite">
+        <div class="ai-msg bot">Depois de analisar seu PDF, pode me perguntar qualquer coisa sobre os resultados!</div>
+      </div>
+      <div class="ai-input-row">
+        <input type="text" class="ai-input" id="ai-inp" placeholder="Dúvida sobre Python..." />
+        <button class="ai-send" onclick="sendAI()">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/nav.js"></script>
+  <script>
+    // ── DRAG & DROP ──────────────────────────
+    function handleDragOver(e) {
+      e.preventDefault();
+      document.getElementById('drop-zone').classList.add('drag');
+    }
+    function handleDragLeave() {
+      document.getElementById('drop-zone').classList.remove('drag');
+    }
+    function handleDrop(e) {
+      e.preventDefault();
+      handleDragLeave();
+      const file = e.dataTransfer.files[0];
+      if (file?.type === 'application/pdf') handleFile(file);
+      else showError('Por favor envie um arquivo PDF.');
+    }
+
+    // ── FILE HANDLING ────────────────────────
+    async function handleFile(file) {
+      if (!file) return;
+
+      const key = PP.getKey();
+      if (!key) {
+        showError('⚠️ Configure sua Anthropic API key no campo acima antes de analisar.');
+        return;
+      }
+
+      showLoading(file.name);
+
+      try {
+        const base64 = await toBase64(file);
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': key,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 2500,
+            system: `Você é um especialista em Python e ensino de programação. Analise documentos de estudo Python e forneça análise estruturada em português brasileiro.
+
+Responda SEMPRE usando exatamente estes títulos de seção (com ## e o emoji):
+
+## ✅ O que o material cobre bem
+Liste os tópicos presentes e bem explicados. Use "-" para cada item.
+
+## ❌ O que está faltando
+Liste tópicos importantes ausentes ou muito superficiais. Use "-" para cada item.
+
+## ⚠️ O que está desatualizado
+Liste práticas/versões antigas e o que substituiu cada uma. Use "-" para cada item.
+
+## 🎯 Conexão com uso real
+Para cada tópico principal, explique onde seria usado em projetos reais (QA, automação, backend). Use "-" para cada item.
+
+## 📋 Plano de estudos recomendado
+Sequência personalizada baseada no material atual + lacunas. Inclua estimativa de tempo. Use "-" para cada etapa.
+
+Seja específico, prático e direto. Não seja genérico.`,
+            messages: [{
+              role: 'user',
+              content: [
+                {
+                  type: 'document',
+                  source: { type: 'base64', media_type: 'application/pdf', data: base64 }
+                },
+                {
+                  type: 'text',
+                  text: 'Analise este material de estudo Python. Identifique o que está bem coberto, o que falta, o que está desatualizado, e crie um plano de estudos personalizado com conexões reais.'
+                }
+              ]
+            }]
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+          showError(`Erro da API: ${data.error.message}`);
+          return;
+        }
+
+        showResult(file.name, data.content[0].text);
+
+      } catch (e) {
+        showError(`Erro de conexão: ${e.message}`);
+      }
+    }
+
+    function toBase64(file) {
+      return new Promise((res, rej) => {
+        const reader = new FileReader();
+        reader.onload  = () => res(reader.result.split(',')[1]);
+        reader.onerror = () => rej(new Error('Falha ao ler arquivo'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ── RENDERING ────────────────────────────
+    function showLoading(filename) {
+      document.getElementById('pdf-result').innerHTML = `
+        <div class="pdf-loading" role="status" aria-label="Analisando PDF">
+          <div class="spinner" aria-hidden="true"></div>
+          <p style="color:var(--text2);font-size:.88rem">Analisando <strong>${filename}</strong> com IA...</p>
+          <p style="color:var(--text3);font-size:.78rem;margin-top:.4rem">Isso pode levar 10–20 segundos</p>
+        </div>`;
+    }
+
+    function showError(msg) {
+      document.getElementById('pdf-result').innerHTML = `
+        <div style="background:var(--surface);border:1px solid var(--red);border-radius:var(--radius);padding:1.25rem;color:var(--red);font-size:.88rem">
+          ${msg}
+        </div>`;
+    }
+
+    function showResult(filename, markdown) {
+      const html = parseMarkdown(markdown);
+      document.getElementById('pdf-result').innerHTML = `
+        <div class="pdf-out">
+          <div class="pdf-out-header">
+            <span style="font-size:1.5rem" aria-hidden="true">📄</span>
+            <div>
+              <div style="font-weight:700;font-size:.95rem">${filename}</div>
+              <div style="font-size:.75rem;color:var(--text3);font-family:var(--font-mono)">Analisado com Claude Haiku • ${new Date().toLocaleDateString('pt-BR')}</div>
+            </div>
+          </div>
+          <div class="pdf-out-body">${html}</div>
+        </div>`;
+    }
+
+    function parseMarkdown(md) {
+      // Section headers
+      let html = md.replace(/^## (.+)$/gm, '</div><h3>$1</h3><div class="section-content">');
+
+      // Bold
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+      // Inline code
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // List items with classification
+      html = html.replace(/^- ✅(.+)$/gm, '<li class="ok">✅$1</li>');
+      html = html.replace(/^- ❌(.+)$/gm, '<li class="missing">❌$1</li>');
+      html = html.replace(/^- ⚠️(.+)$/gm, '<li class="old">⚠️$1</li>');
+      html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+
+      // Wrap consecutive <li> in <ul>
+      html = html.replace(/(<li[^>]*>[\s\S]*?<\/li>\n?)+/g, '<ul>$&</ul>');
+
+      // Paragraphs
+      html = html.replace(/\n\n(?!<)/g, '</p><p>');
+
+      // Cleanup
+      html = `<div class="section-content">${html}</div>`;
+      html = html.replace(/<div class="section-content"><\/div>/g, '');
+      html = html.replace(/<p><\/p>/g, '');
+
+      return html;
+    }
+
+    // Keyboard accessibility for drop zone
+    document.getElementById('drop-zone').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        document.getElementById('file-input').click();
+      }
+    });
+  </script>
+</body>
+</html>

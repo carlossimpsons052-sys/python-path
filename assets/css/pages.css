@@ -1,0 +1,175 @@
+/* =========================================
+   PYTHONPATH — Pages CSS
+   ========================================= */
+
+/* ── TRILHA ── */
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+}
+.mod-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  cursor: default;
+  transition: all 0.2s;
+}
+.mod-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.25); }
+.mod-num { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text3); margin-bottom: 0.75rem; }
+.mod-icon { font-size: 1.8rem; margin-bottom: 0.6rem; display: block; }
+.mod-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+.mod-desc { font-size: 0.8rem; color: var(--text2); font-weight: 300; line-height: 1.5; margin-bottom: 1rem; }
+.mod-real {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.8rem;
+  background: rgba(77,157,224,.06);
+  border: 1px solid rgba(77,157,224,.15);
+  border-radius: var(--radius2);
+  font-size: 0.75rem;
+  color: var(--blue2);
+  line-height: 1.5;
+}
+.mod-real strong { color: var(--blue); }
+
+/* ── CHALLENGES ── */
+.ch-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+.ch-sidebar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: sticky;
+  top: calc(var(--nav-h) + 1rem);
+}
+.ch-section { border-bottom: 1px solid var(--border); padding: 0.4rem; }
+.ch-section:last-child { border-bottom: none; }
+.ch-label { font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 2px; padding: 0.5rem 0.7rem 0.2rem; font-family: var(--font-mono); display: block; }
+.ch-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.12s;
+  text-align: left;
+}
+.ch-btn:hover, .ch-btn.active { background: var(--bg); color: var(--text); }
+.ch-badge { font-size: 0.68rem; padding: 0.1rem 0.45rem; border-radius: 100px; background: var(--bg2); border: 1px solid var(--border); color: var(--text3); font-family: var(--font-mono); }
+.ch-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.ch-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.ch-card:hover { border-color: var(--border2); }
+.ch-head { padding: 1.1rem 1.25rem; display: flex; align-items: flex-start; gap: 0.85rem; cursor: pointer; user-select: none; }
+.ch-info { flex: 1; }
+.ch-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 0.25rem; }
+.ch-desc { font-size: 0.78rem; color: var(--text2); font-weight: 300; }
+.ch-chevron { color: var(--text3); font-size: 0.7rem; padding-top: 0.2rem; transition: transform 0.2s; flex-shrink: 0; }
+.ch-card.open .ch-chevron { transform: rotate(90deg); }
+.ch-body { display: none; border-top: 1px solid var(--border); }
+.ch-card.open .ch-body { display: block; }
+.ch-inner { padding: 1.25rem; }
+.ch-problem {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius2);
+  padding: 0.9rem 1rem;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+}
+.ch-real {
+  background: rgba(92,207,126,.06);
+  border: 1px solid rgba(92,207,126,.15);
+  border-radius: var(--radius2);
+  padding: 0.75rem 1rem;
+  font-size: 0.78rem;
+  color: var(--green);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+.ch-real strong { color: #8dffa8; }
+.ch-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0; }
+.sol-block { display: none; margin-top: 0.9rem; }
+.sol-block.show { display: block; }
+
+/* ── PROJECTS ── */
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.1rem;
+}
+.proj-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.proj-card::after { content: ''; position: absolute; top: 0; right: 0; width: 80px; height: 80px; background: radial-gradient(circle at top right, var(--accent, rgba(245,200,66,.06)) 0%, transparent 70%); pointer-events: none; }
+.proj-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.25); }
+.proj-level { font-size: 0.7rem; font-family: var(--font-mono); color: var(--text3); margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+.proj-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+.proj-desc { font-size: 0.8rem; color: var(--text2); font-weight: 300; line-height: 1.6; margin-bottom: 0.85rem; }
+.proj-why { background: rgba(245,167,66,.06); border: 1px solid rgba(245,167,66,.15); border-radius: var(--radius2); padding: 0.6rem 0.8rem; font-size: 0.75rem; color: var(--orange); margin-bottom: 0.85rem; line-height: 1.5; }
+
+/* ── PDF ANALYZER ── */
+.drop-zone {
+  background: var(--surface);
+  border: 2px dashed var(--border2);
+  border-radius: var(--radius);
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.drop-zone:hover { border-color: var(--blue); background: rgba(77,157,224,.04); }
+.drop-zone.drag  { border-color: var(--yellow); background: rgba(245,200,66,.06); }
+.drop-zone-icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; }
+.drop-zone h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
+.drop-zone p { color: var(--text2); font-size: 0.85rem; }
+.pdf-result { margin-top: 1.5rem; }
+.pdf-loading { text-align: center; padding: 2.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--yellow); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.pdf-out { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.pdf-out-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.75rem; }
+.pdf-out-body { padding: 1.5rem; }
+.pdf-out-body h3 { font-size: 1.05rem; font-weight: 700; color: var(--yellow); margin: 1.25rem 0 0.5rem; }
+.pdf-out-body h3:first-child { margin-top: 0; }
+.pdf-out-body p { font-size: 0.85rem; color: var(--text2); line-height: 1.7; margin-bottom: 0.6rem; }
+.pdf-out-body ul { list-style: none; margin: 0.5rem 0 1rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.pdf-out-body li { font-size: 0.83rem; color: var(--text2); padding: 0.5rem 0.75rem; background: var(--bg); border-radius: var(--radius2); border-left: 2px solid var(--blue); line-height: 1.5; }
+.pdf-out-body li.ok      { border-left-color: var(--green); }
+.pdf-out-body li.missing { border-left-color: var(--red); }
+.pdf-out-body li.old     { border-left-color: var(--yellow); }
+.pdf-out-body code { font-family: var(--font-mono); color: var(--yellow); background: var(--bg); padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.78rem; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .ch-layout { grid-template-columns: 1fr; }
+  .ch-sidebar { position: static; }
+}

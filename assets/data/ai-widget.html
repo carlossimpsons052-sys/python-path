@@ -1,0 +1,25 @@
+<!-- =========================================
+     AI Chat Widget — include in every page
+     ========================================= -->
+<div class="ai-float">
+  <button class="ai-toggle" onclick="toggleAI()" aria-label="Abrir PyBot">🤖</button>
+  <div class="ai-panel" id="ai-panel" role="dialog" aria-label="PyBot">
+    <div class="ai-head">
+      <div class="ai-av" aria-hidden="true">🐍</div>
+      <div>
+        <div class="ai-name">PyBot</div>
+        <div class="ai-online">● online</div>
+      </div>
+    </div>
+    <div class="ai-msgs" id="ai-msgs" aria-live="polite">
+      <div class="ai-msg bot">
+        Oi! Sou o PyBot 🐍 Tire dúvidas sobre Python aqui. Configure sua API key em
+        <a href="../pages/analisar.html" style="color:var(--yellow)">Analisar PDF</a> para me usar.
+      </div>
+    </div>
+    <div class="ai-input-row">
+      <input type="text" class="ai-input" id="ai-inp" placeholder="Dúvida sobre Python..." aria-label="Mensagem para PyBot" />
+      <button class="ai-send" onclick="sendAI()" aria-label="Enviar">↑</button>
+    </div>
+  </div>
+</div>

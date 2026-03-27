@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desafios — PythonPath</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="logo">Python<span>Path</span></a>
+    <ul class="nav-links">
+      <li><a href="trilha.html">Trilha</a></li>
+      <li><a href="desafios.html">Desafios</a></li>
+      <li><a href="projetos.html">Projetos</a></li>
+      <li><a href="analisar.html">Analisar PDF</a></li>
+    </ul>
+    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Abrir menu">☰</button>
+  </nav>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <p class="eyebrow">// desafios práticos</p>
+      <h1 class="page-title">Pratique com contexto</h1>
+      <p class="page-sub">Cada desafio tem um "por que isso importa" — onde você usaria isso de verdade.</p>
+
+      <div class="ch-layout">
+        <!-- Sidebar filtros -->
+        <aside class="ch-sidebar" aria-label="Filtros">
+          <div class="ch-section">
+            <span class="ch-label">Dificuldade</span>
+            <button class="ch-btn active" onclick="filter('all', this)">Todos <span class="ch-badge" id="cnt-all">0</span></button>
+            <button class="ch-btn" onclick="filter('easy', this)">🟢 Fácil <span class="ch-badge" id="cnt-easy">0</span></button>
+            <button class="ch-btn" onclick="filter('medium', this)">🟡 Médio <span class="ch-badge" id="cnt-medium">0</span></button>
+            <button class="ch-btn" onclick="filter('hard', this)">🔴 Difícil <span class="ch-badge" id="cnt-hard">0</span></button>
+          </div>
+          <div class="ch-section">
+            <span class="ch-label">Tema</span>
+            <button class="ch-btn" onclick="filter('strings', this)">Strings</button>
+            <button class="ch-btn" onclick="filter('listas', this)">Listas</button>
+            <button class="ch-btn" onclick="filter('funcoes', this)">Funções</button>
+            <button class="ch-btn" onclick="filter('oop', this)">OOP</button>
+            <button class="ch-btn" onclick="filter('algoritmos', this)">Algoritmos</button>
+          </div>
+        </aside>
+
+        <!-- Lista de desafios -->
+        <div class="ch-list" id="ch-list" role="list"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>PythonPath — feito com 🐍 e ☕</p>
+  </footer>
+
+  <!-- AI Widget -->
+  <div class="ai-float">
+    <button class="ai-toggle" onclick="toggleAI()" aria-label="Abrir PyBot">🤖</button>
+    <div class="ai-panel" id="ai-panel" role="dialog">
+      <div class="ai-head">
+        <div class="ai-av">🐍</div>
+        <div><div class="ai-name">PyBot</div><div class="ai-online">● online</div></div>
+      </div>
+      <div class="ai-msgs" id="ai-msgs" aria-live="polite">
+        <div class="ai-msg bot">Travou num desafio? Clique em "Hint da IA" ou me pergunte aqui!</div>
+      </div>
+      <div class="ai-input-row">
+        <input type="text" class="ai-input" id="ai-inp" placeholder="Dúvida sobre Python..." />
+        <button class="ai-send" onclick="sendAI()">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script>
+    let currentFilter = 'all';
+
+    function filter(f, btn) {
+      currentFilter = f;
+      document.querySelectorAll('.ch-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    }
+
+    function render() {
+      const list = document.getElementById('ch-list');
+      const data = PP.CHALLENGES;
+
+      // Update counters
+      document.getElementById('cnt-all').textContent    = data.length;
+      document.getElementById('cnt-easy').textContent   = data.filter(c => c.diff === 'easy').length;
+      document.getElementById('cnt-medium').textContent = data.filter(c => c.diff === 'medium').length;
+      document.getElementById('cnt-hard').textContent   = data.filter(c => c.diff === 'hard').length;
+
+      const filtered = currentFilter === 'all'
+        ? data
+        : data.filter(c => c.diff === currentFilter || c.tema === currentFilter);
+
+      if (!filtered.length) {
+        list.innerHTML = '<p style="color:var(--text3);text-align:center;padding:3rem">Nenhum desafio nesta categoria ainda.</p>';
+        return;
+      }
+
+      const diffLabel = { easy: 'Fácil', medium: 'Médio', hard: 'Difícil' };
+      const diffClass = { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' };
+
+      list.innerHTML = filtered.map(c => `
+        <article class="ch-card" id="ch-${c.id}" role="listitem">
+          <div class="ch-head" onclick="toggle(${c.id})" role="button" aria-expanded="false" aria-controls="body-${c.id}" tabindex="0">
+            <span class="diff ${diffClass[c.diff]}">${diffLabel[c.diff]}</span>
+            <div class="ch-info">
+              <div class="ch-title">${c.title}</div>
+              <div class="ch-desc">${c.desc}</div>
+            </div>
+            <span class="ch-chevron" aria-hidden="true">▶</span>
+          </div>
+          <div class="ch-body" id="body-${c.id}" role="region" aria-label="${c.title}">
+            <div class="ch-inner">
+              <div class="ch-problem" aria-label="Enunciado">${c.problem}</div>
+              <div class="ch-real"><strong>🎯 Por que isso importa:</strong> ${c.real}</div>
+              <div class="ch-actions">
+                <button class="btn btn-ghost btn-sm" onclick="getHint('${c.title.replace(/'/g,"\\'")}', '${c.problem.replace(/'/g,"\\'").replace(/\n/g,'\\n')}')">
+                  💡 Hint da IA
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="toggleSol(${c.id})">
+                  👁️ Ver solução
+                </button>
+              </div>
+              <div class="sol-block" id="sol-${c.id}">
+                <div class="code-block" style="margin-top:.9rem">
+                  <div class="code-block-header">
+                    <span class="code-lang">python</span>
+                    <button class="code-copy" onclick="copy(${c.id})">copiar</button>
+                  </div>
+                  <pre id="pre-${c.id}">${c.solution}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function toggle(id) {
+      const card = document.getElementById('ch-' + id);
+      const head = card.querySelector('.ch-head');
+      const isOpen = card.classList.toggle('open');
+      head.setAttribute('aria-expanded', isOpen);
+    }
+
+    function toggleSol(id) {
+      document.getElementById('sol-' + id).classList.toggle('show');
+    }
+
+    function copy(id) {
+      const pre = document.getElementById('pre-' + id);
+      navigator.clipboard.writeText(pre.innerText).then(() => {
+        const btn = document.querySelector(`#sol-${id} .code-copy`);
+        btn.textContent = '✓ copiado!';
+        setTimeout(() => btn.textContent = 'copiar', 2000);
+      });
+    }
+
+    // Keyboard accessibility for challenge headers
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.classList.contains('ch-head')) {
+        const id = e.target.closest('.ch-card').id.replace('ch-', '');
+        toggle(id);
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

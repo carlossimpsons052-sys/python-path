@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projetos — PythonPath</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="../assets/css/pages.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="logo">Python<span>Path</span></a>
+    <ul class="nav-links">
+      <li><a href="trilha.html">Trilha</a></li>
+      <li><a href="desafios.html">Desafios</a></li>
+      <li><a href="projetos.html">Projetos</a></li>
+      <li><a href="analisar.html">Analisar PDF</a></li>
+    </ul>
+    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Abrir menu">☰</button>
+  </nav>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <p class="eyebrow">// projetos práticos</p>
+      <h1 class="page-title">Construa algo real</h1>
+      <p class="page-sub">
+        Projetos com "por que construir isso" — aprenda construindo algo que faz sentido de verdade.
+        Cada projeto está alinhado com o que a industria usa.
+      </p>
+
+      <div class="proj-grid" id="proj-grid" role="list"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>PythonPath — feito com 🐍 e ☕</p>
+  </footer>
+
+  <!-- AI Widget -->
+  <div class="ai-float">
+    <button class="ai-toggle" onclick="toggleAI()" aria-label="Abrir PyBot">🤖</button>
+    <div class="ai-panel" id="ai-panel" role="dialog">
+      <div class="ai-head">
+        <div class="ai-av">🐍</div>
+        <div><div class="ai-name">PyBot</div><div class="ai-online">● online</div></div>
+      </div>
+      <div class="ai-msgs" id="ai-msgs" aria-live="polite">
+        <div class="ai-msg bot">Tem dúvidas sobre como começar algum projeto? Me pergunte!</div>
+      </div>
+      <div class="ai-input-row">
+        <input type="text" class="ai-input" id="ai-inp" placeholder="Como começar o projeto X?" />
+        <button class="ai-send" onclick="sendAI()">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script>
+    function render() {
+      const grid = document.getElementById('proj-grid');
+      grid.innerHTML = PP.PROJECTS.map(p => `
+        <article class="proj-card" role="listitem" style="--accent: ${p.accent}">
+          <div class="proj-level">${p.level}</div>
+          <h2 class="proj-title">${p.title}</h2>
+          <p class="proj-desc">${p.desc}</p>
+          <div class="proj-why">💡 ${p.why}</div>
+          <div class="tags">${p.skills.map(s => `<span class="tag">${s}</span>`).join('')}</div>
+        </article>
+      `).join('');
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PythonPath — Aprenda Python do Zero ao Avançado</title>
+  <meta name="description" content="Plataforma de aprendizado Python com trilha estruturada, desafios práticos e IA integrada." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/home.css" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo">Python<span>Path</span></a>
+    <ul class="nav-links">
+      <li><a href="pages/trilha.html">Trilha</a></li>
+      <li><a href="pages/desafios.html">Desafios</a></li>
+      <li><a href="pages/projetos.html">Projetos</a></li>
+      <li><a href="pages/analisar.html">Analisar PDF</a></li>
+    </ul>
+    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Abrir menu">☰</button>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-content">
+        <span class="hero-emoji" aria-hidden="true">🐍</span>
+        <div class="hero-badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          v1.0 — em desenvolvimento ativo
+        </div>
+        <h1 class="hero-title">
+          <span class="title-line">Aprenda</span>
+          <span class="title-gradient">Python.</span>
+        </h1>
+        <p class="hero-sub">
+          Do zero ao avançado com trilha estruturada, desafios com contexto real
+          e IA que analisa seus materiais de estudo.
+        </p>
+        <div class="hero-actions">
+          <a href="pages/trilha.html" class="btn btn-primary">Começar trilha →</a>
+          <a href="pages/analisar.html" class="btn btn-secondary">Analisar meu PDF</a>
+        </div>
+        <div class="hero-stats" aria-label="Estatísticas da plataforma">
+          <div class="stat">
+            <span class="stat-num">4</span>
+            <span class="stat-label">Níveis</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">30+</span>
+            <span class="stat-label">Módulos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">AI</span>
+            <span class="stat-label">Powered</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features container" aria-label="Funcionalidades">
+      <div class="feature-card">
+        <span class="feature-icon" aria-hidden="true">🗺️</span>
+        <h3>Trilha completa</h3>
+        <p>30+ módulos do básico ao expert, cada um com contexto de uso real em projetos de automação e desenvolvimento.</p>
+        <a href="pages/trilha.html" class="feature-link">Ver trilha →</a>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" aria-hidden="true">⚔️</span>
+        <h3>Desafios práticos</h3>
+        <p>Exercícios progressivos com hints de IA, soluções comentadas e explicação de onde cada conceito aparece no mundo real.</p>
+        <a href="pages/desafios.html" class="feature-link">Ver desafios →</a>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" aria-hidden="true">🏗️</span>
+        <h3>Projetos reais</h3>
+        <p>Ideias de projetos open source organizadas por nível — do CLI de terminal ao gerador de testes com IA.</p>
+        <a href="pages/projetos.html" class="feature-link">Ver projetos →</a>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" aria-hidden="true">🤖</span>
+        <h3>Análise por IA</h3>
+        <p>Suba qualquer material de estudo em PDF. A IA identifica lacunas, desatualizações e monta um plano personalizado.</p>
+        <a href="pages/analisar.html" class="feature-link">Analisar PDF →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>PythonPath — feito com 🐍 e ☕ &nbsp;|&nbsp;
+      Trilha baseada em <a href="https://roadmap.sh/python" target="_blank" rel="noopener">roadmap.sh/python</a>
+    </p>
+  </footer>
+
+  <!-- AI Widget -->
+  <div class="ai-float">
+    <button class="ai-toggle" onclick="toggleAI()" aria-label="Abrir PyBot">🤖</button>
+    <div class="ai-panel" id="ai-panel" role="dialog" aria-label="PyBot">
+      <div class="ai-head">
+        <div class="ai-av" aria-hidden="true">🐍</div>
+        <div>
+          <div class="ai-name">PyBot</div>
+          <div class="ai-online">● online</div>
+        </div>
+      </div>
+      <div class="ai-msgs" id="ai-msgs" aria-live="polite">
+        <div class="ai-msg bot">Oi! Sou o PyBot 🐍 Configure sua API key em <a href="pages/analisar.html" style="color:var(--yellow)">Analisar PDF</a> para tirar dúvidas sobre Python!</div>
+      </div>
+      <div class="ai-input-row">
+        <input type="text" class="ai-input" id="ai-inp" placeholder="Dúvida sobre Python..." aria-label="Mensagem" />
+        <button class="ai-send" onclick="sendAI()" aria-label="Enviar">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/nav.js"></script>
+</body>
+</html>
