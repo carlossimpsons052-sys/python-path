@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Módulo 01 — Ambiente Python Moderno · PythonPath</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+  <link rel="stylesheet" href="../../assets/css/pages.css" />
+  <link rel="stylesheet" href="../../assets/css/module.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../../index.html" class="logo">Python<span>Path</span></a>
+    <ul class="nav-links">
+      <li><a href="../trilha.html" class="active">Trilha</a></li>
+      <li><a href="../desafios.html">Desafios</a></li>
+      <li><a href="../projetos.html">Projetos</a></li>
+      <li><a href="../analisar.html">Analisar PDF</a></li>
+    </ul>
+    <button class="nav-mobile-btn" id="nav-toggle">☰</button>
+  </nav>
+
+  <main class="page-wrapper">
+    <div class="container">
+
+      <!-- Progress bar -->
+      <div class="mod-progress">
+        <div class="progress-info">
+          <strong>Módulo 01 de 30</strong> · Nível Iniciante
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" style="width: 3.3%"></div>
+        </div>
+        <a href="02-tipos-dados.html" class="btn btn-secondary btn-sm">Próximo →</a>
+      </div>
+
+      <div class="mod-page-layout">
+
+        <!-- Sidebar TOC -->
+        <aside class="mod-sidebar">
+          <div class="mod-sidebar-header">Neste módulo</div>
+          <nav aria-label="Seções do módulo">
+            <a class="mod-toc-item active" href="#historia"><span class="mod-toc-icon">📖</span> História e contexto</a>
+            <a class="mod-toc-item" href="#instalacao"><span class="mod-toc-icon">⬇️</span> Instalação moderna</a>
+            <a class="mod-toc-item" href="#venv"><span class="mod-toc-icon">📦</span> Ambiente virtual</a>
+            <a class="mod-toc-item" href="#uv"><span class="mod-toc-icon">⚡</span> uv — o novo padrão</a>
+            <a class="mod-toc-item" href="#vscode"><span class="mod-toc-icon">🖥️</span> VSCode + extensões</a>
+            <a class="mod-toc-item" href="#primeiro-script"><span class="mod-toc-icon">🐍</span> Primeiro script</a>
+            <a class="mod-toc-item" href="#uso-real"><span class="mod-toc-icon">🎯</span> Uso real em QA</a>
+            <a class="mod-toc-item" href="#desafio"><span class="mod-toc-icon">⚔️</span> Desafio</a>
+            <a class="mod-toc-item" href="#recursos"><span class="mod-toc-icon">🔗</span> Recursos</a>
+          </nav>
+          <div class="mod-nav-btns">
+            <a href="../trilha.html" class="btn btn-ghost btn-sm">← Trilha</a>
+            <a href="02-tipos-dados.html" class="btn btn-secondary btn-sm">Próximo →</a>
+          </div>
+        </aside>
+
+        <!-- Main content -->
+        <article class="mod-content">
+
+          <!-- Header -->
+          <header class="mod-header">
+            <div class="mod-header-meta">
+              <span class="mod-header-num">Módulo 01</span>
+              <span class="mod-level-badge level-iniciante">🌱 Iniciante</span>
+            </div>
+            <span class="mod-header-icon" aria-hidden="true">🖥️</span>
+            <h1 class="mod-header-title">Ambiente Python Moderno</h1>
+            <p class="mod-header-desc">
+              Antes de escrever uma linha de código, você precisa de um ambiente bem configurado.
+              Um ambiente bagunçado causa dores de cabeça que desmotivam — vamos fazer isso certo desde o início,
+              com as ferramentas que o mercado usa em 2025.
+            </p>
+            <div class="mod-header-tags tags">
+              <span class="tag">python 3.12+</span>
+              <span class="tag">uv</span>
+              <span class="tag">venv</span>
+              <span class="tag">pyenv</span>
+              <span class="tag">VSCode</span>
+              <span class="tag">PATH</span>
+            </div>
+          </header>
+
+          <!-- SEÇÃO 1: História -->
+          <section class="mod-section" id="historia">
+            <p class="mod-section-eyebrow">01 · contexto</p>
+            <h2 class="mod-section-title">Por que o ambiente importa tanto?</h2>
+
+            <p>
+              Imagine que você tem dois projetos: um usa Python 3.9 com uma versão antiga de uma biblioteca,
+              e outro usa Python 3.12 com a versão mais recente da mesma biblioteca. Se tudo estiver instalado
+              no mesmo lugar, eles vão entrar em conflito. Esse era o pesadelo clássico do desenvolvedor Python.
+            </p>
+
+            <div class="callout info">
+              <span class="callout-icon">📖</span>
+              <div class="callout-body">
+                <strong>A evolução do problema</strong>
+                <p>
+                  Python 2 e Python 3 coexistiram por mais de 10 anos. No mesmo computador, você podia ter
+                  <code>python</code> apontando para Python 2.7 e <code>python3</code> para Python 3.x —
+                  uma fonte enorme de confusão. Em 2020 o Python 2 foi oficialmente descontinuado.
+                  Hoje só existe Python 3, mas o problema de versões múltiplas e conflito de dependências continua.
+                </p>
+              </div>
+            </div>
+
+            <p>
+              A solução são os <strong>ambientes virtuais</strong>: pastas isoladas que contêm uma versão
+              específica do Python e suas dependências. Cada projeto tem o seu. Quando você ativa um,
+              tudo o que instalar vai só para aquele projeto.
+            </p>
+          </section>
+
+          <!-- SEÇÃO 2: Instalação -->
+          <section class="mod-section" id="instalacao">
+            <p class="mod-section-eyebrow">02 · instalação</p>
+            <h2 class="mod-section-title">Instalando Python do jeito certo</h2>
+
+            <p>
+              A versão atual recomendada é o <strong>Python 3.12</strong> (estável, com melhorias significativas
+              de performance e mensagens de erro muito melhores). Evite a 3.13 por enquanto se for usar
+              bibliotecas de ML — algumas ainda não estão totalmente compatíveis.
+            </p>
+
+            <div class="callout warning">
+              <span class="callout-icon">⚠️</span>
+              <div class="callout-body">
+                <strong>Não instale pelo site oficial se for Mac/Linux</strong>
+                <p>No Mac, use o Homebrew. No Linux, use o gerenciador de pacotes ou pyenv.
+                Instalar pelo site oficial no Mac/Linux frequentemente causa problemas com o PATH
+                e conflita com o Python do sistema.</p>
+              </div>
+            </div>
+
+            <h3 style="font-size:.95rem;font-weight:700;margin:1.25rem 0 .75rem">🍎 macOS</h3>
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">bash</span>
+                <button class="code-copy" onclick="copyCode(this)">copiar</button>
+              </div>
+              <pre><span class="cm"># 1. Instale o Homebrew (se não tiver)</span>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+<span class="cm"># 2. Instale o pyenv (gerenciador de versões)</span>
+brew install pyenv
+
+<span class="cm"># 3. Configure o shell (cole no seu ~/.zshrc)</span>
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+source ~/.zshrc
+
+<span class="cm"># 4. Instale o Python 3.12</span>
+pyenv install 3.12
+pyenv global 3.12
+
+<span class="cm"># 5. Verifique</span>
+python --version  <span class="cm"># → Python 3.12.x</span></pre>
+            </div>
+
+            <h3 style="font-size:.95rem;font-weight:700;margin:1.25rem 0 .75rem">🪟 Windows</h3>
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">powershell</span>
+                <button class="code-copy" onclick="copyCode(this)">copiar</button>
+              </div>
+              <pre><span class="cm"># No Windows, baixe o instalador oficial</span>
+<span class="cm"># https://www.python.org/downloads/</span>
+<span class="cm"># ⚠️ IMPORTANTE: marque "Add Python to PATH" durante a instalação!</span>
+
+<span class="cm"># Verifique depois de instalar</span>
+python --version
+
+<span class="cm"># Se não funcionar, tente:</span>
+py --version</pre>
+            </div>
+
+            <h3 style="font-size:.95rem;font-weight:700;margin:1.25rem 0 .75rem">🐧 Linux (Ubuntu/Debian)</h3>
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">bash</span>
+                <button class="code-copy" onclick="copyCode(this)">copiar</button>
+              </div>
+              <pre>sudo apt update && sudo apt upgrade -y
+sudo apt install python3.12 python3.12-venv python3-pip -y
+
+<span class="cm"># Verifique</span>
+python3.12 --version</pre>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 3: venv -->
+          <section class="mod-section" id="venv">
+            <p class="mod-section-eyebrow">03 · isolamento</p>
+            <h2 class="mod-section-title">Ambientes virtuais com venv</h2>
+
+            <p>
+              O <code>venv</code> é o módulo nativo do Python para criar ambientes virtuais.
+              É simples e funciona bem para projetos pequenos. Para projetos maiores ou equipes,
+              o <strong>uv</strong> (próxima seção) é a escolha moderna.
+            </p>
+
+            <div class="steps">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                  <div class="step-title">Crie a pasta do projeto</div>
+                  <div class="step-desc"><code>mkdir meu-projeto && cd meu-projeto</code></div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                  <div class="step-title">Crie o ambiente virtual</div>
+                  <div class="step-desc"><code>python -m venv venv</code> — isso cria uma pasta <code>venv/</code> com Python isolado</div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                  <div class="step-title">Ative o ambiente</div>
+                  <div class="step-desc">
+                    Mac/Linux: <code>source venv/bin/activate</code><br>
+                    Windows: <code>.\venv\Scripts\activate</code><br>
+                    Você vai ver <code>(venv)</code> no terminal — isso confirma que está ativo.
+                  </div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-body">
+                  <div class="step-title">Instale dependências</div>
+                  <div class="step-desc"><code>pip install requests pytest</code> — agora só existem nesse ambiente</div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">5</div>
+                <div class="step-body">
+                  <div class="step-title">Desative quando terminar</div>
+                  <div class="step-desc"><code>deactivate</code></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">💡</span>
+              <div class="callout-body">
+                <strong>Boas práticas</strong>
+                <p>Sempre adicione <code>venv/</code> no <code>.gitignore</code>. Nunca commite o ambiente virtual.
+                Em vez disso, salve as dependências com <code>pip freeze > requirements.txt</code>
+                e quem clonar o projeto instala com <code>pip install -r requirements.txt</code>.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 4: uv -->
+          <section class="mod-section" id="uv">
+            <p class="mod-section-eyebrow">04 · o novo padrão</p>
+            <h2 class="mod-section-title">uv — 10x mais rápido que pip</h2>
+
+            <p>
+              Em 2024, a Astral lançou o <strong>uv</strong> — um gerenciador de pacotes e ambientes Python
+              escrito em Rust. Ele substitui <code>pip</code>, <code>venv</code>, <code>pyenv</code>
+              e até o <code>pip-tools</code> em um único binário. É drasticamente mais rápido e se tornou
+              rapidamente o padrão da indústria.
+            </p>
+
+            <div class="comparison">
+              <div class="compare-col compare-old">
+                <div class="compare-header">❌ Jeito antigo</div>
+                <div class="compare-body">
+                  <pre>python -m venv venv
+source venv/bin/activate
+pip install requests pytest
+pip freeze > requirements.txt
+<span class="cm"># Demora segundos a minutos</span></pre>
+                </div>
+              </div>
+              <div class="compare-col compare-new">
+                <div class="compare-header">✅ Com uv (moderno)</div>
+                <div class="compare-body">
+                  <pre>uv init meu-projeto
+cd meu-projeto
+uv add requests pytest
+<span class="cm"># Pronto. Milissegundos.</span>
+<span class="cm"># Gerencia tudo automaticamente</span></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">bash</span>
+                <button class="code-copy" onclick="copyCode(this)">copiar</button>
+              </div>
+              <pre><span class="cm"># Instale o uv</span>
+curl -LsSf https://astral.sh/uv/install.sh | sh  <span class="cm"># Mac/Linux</span>
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"  <span class="cm"># Windows</span>
+
+<span class="cm"># Crie um projeto novo</span>
+uv init meu-projeto
+cd meu-projeto
+
+<span class="cm"># Adicione dependências</span>
+uv add requests pytest playwright
+
+<span class="cm"># Execute scripts sem ativar manualmente</span>
+uv run python meu_script.py
+uv run pytest
+
+<span class="cm"># Instale uma versão específica do Python</span>
+uv python install 3.12</pre>
+            </div>
+
+            <div class="callout real">
+              <span class="callout-icon">🎯</span>
+              <div class="callout-body">
+                <strong>Por que isso importa no seu trabalho como QA</strong>
+                <p>
+                  Você vai ter projetos de automação com Cypress, Playwright, Robot Framework — cada um
+                  com suas próprias dependências Python. Com <code>uv</code>, criar um ambiente isolado
+                  para cada projeto leva 2 segundos. Sem conflitos, sem "funciona na minha máquina".
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 5: VSCode -->
+          <section class="mod-section" id="vscode">
+            <p class="mod-section-eyebrow">05 · editor</p>
+            <h2 class="mod-section-title">VSCode configurado para Python</h2>
+
+            <p>
+              O VSCode é gratuito, leve e tem o melhor suporte a Python disponível.
+              Com as extensões certas, você tem IntelliSense, debugging, formatação automática
+              e integração com pytest — tudo funcionando junto.
+            </p>
+
+            <p>Após instalar o VSCode em <a href="https://code.visualstudio.com" target="_blank" rel="noopener" style="color:var(--yellow)">code.visualstudio.com</a>, instale estas extensões:</p>
+
+            <div class="steps">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                  <div class="step-title">Python (Microsoft)</div>
+                  <div class="step-desc">A extensão principal. IntelliSense, linting, debugging, seleção de interpretador.</div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                  <div class="step-title">Pylance</div>
+                  <div class="step-desc">Análise estática avançada. Detecta erros de tipo antes de rodar o código.</div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                  <div class="step-title">Ruff</div>
+                  <div class="step-desc">Linter e formatador ultrarrápido (substitui Black + Flake8). O padrão atual.</div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-body">
+                  <div class="step-title">Python Test Explorer</div>
+                  <div class="step-desc">Roda e visualiza testes pytest direto no VSCode, com UI gráfica.</div>
+                </div>
+              </div>
+            </div>
+
+            <p>Configuração recomendada — crie <code>.vscode/settings.json</code> no seu projeto:</p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">json</span>
+                <button class="code-copy" onclick="copyCode(this)">copiar</button>
+              </div>
+              <pre>{
+  "python.defaultInterpreterPath": "./venv/bin/python",
+  "editor.formatOnSave": true,
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests"],
+  "editor.rulers": [88]
+}</pre>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 6: Primeiro script -->
+          <section class="mod-section" id="primeiro-script">
+            <p class="mod-section-eyebrow">06 · na prática</p>
+            <h2 class="mod-section-title">Seu primeiro script Python</h2>
+
+            <p>
+              Com o ambiente configurado, vamos confirmar que tudo funciona. Crie um arquivo
+              <code>hello.py</code> e rode ele.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">python — hello.py</span>
+                <button class="code-copy" onclick="copyCode(this)">copiar</button>
+              </div>
+              <pre><span class="cm"># Seu primeiro script Python</span>
+<span class="cm"># Execute com: python hello.py  ou  uv run python hello.py</span>
+
+nome = <span class="st">"Carlos"</span>
+versao = <span class="bi">__import__</span>(<span class="st">'sys'</span>).version.split()[<span class="nu">0</span>]
+
+<span class="bi">print</span>(<span class="st">f"Olá, {nome}! 🐍"</span>)
+<span class="bi">print</span>(<span class="st">f"Python {versao} está funcionando."</span>)
+<span class="bi">print</span>(<span class="st">"Ambiente configurado com sucesso!"</span>)</pre>
+            </div>
+
+            <p>Para rodar:</p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">bash</span>
+                <button class="code-copy" onclick="copyCode(this)">copiar</button>
+              </div>
+              <pre><span class="cm"># Com venv ativado:</span>
+python hello.py
+
+<span class="cm"># Com uv:</span>
+uv run python hello.py
+
+<span class="cm"># Saída esperada:</span>
+<span class="cm"># Olá, Carlos! 🐍</span>
+<span class="cm"># Python 3.12.x está funcionando.</span>
+<span class="cm"># Ambiente configurado com sucesso!</span></pre>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">💡</span>
+              <div class="callout-body">
+                <strong>F-strings são o jeito moderno de formatar texto</strong>
+                <p>O <code>f"Olá, {nome}!"</code> é uma f-string — coloca o valor da variável dentro da string.
+                Você vai usar isso o tempo todo. Estudaremos em detalhes no Módulo 02.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 7: Uso real -->
+          <section class="mod-section" id="uso-real">
+            <p class="mod-section-eyebrow">07 · contexto profissional</p>
+            <h2 class="mod-section-title">Como isso aparece no trabalho real</h2>
+
+            <p>
+              Em um projeto de automação real, você vai ter uma estrutura parecida com essa.
+              Cada repositório de testes tem seu próprio ambiente virtual — nunca compartilhado.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-lang">estrutura de projeto real</span>
+              </div>
+              <pre>meu-projeto-automacao/
+├── .venv/                  <span class="cm"># ambiente virtual (no .gitignore)</span>
+├── .vscode/
+│   └── settings.json       <span class="cm"># configurações do editor</span>
+├── tests/
+│   ├── api/
+│   │   └── test_auth.py
+│   └── e2e/
+│       └── test_checkout.py
+├── pages/                  <span class="cm"># Page Objects</span>
+│   └── login_page.py
+├── pyproject.toml          <span class="cm"># dependências (com uv)</span>
+└── README.md</pre>
+            </div>
+
+            <div class="callout real">
+              <span class="callout-icon">🎯</span>
+              <div class="callout-body">
+                <strong>Fluxo de um QA Engineer ao entrar num projeto</strong>
+                <p>
+                  <code>git clone repo</code> → <code>cd repo</code> → <code>uv sync</code> (instala tudo automaticamente)
+                  → <code>uv run pytest</code> (roda os testes). Em menos de 1 minuto, você está contribuindo.
+                  Isso só é possível porque o projeto tem um ambiente bem definido.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- DESAFIO -->
+          <section class="mod-challenge" id="desafio">
+            <div class="mod-challenge-header">
+              <span aria-hidden="true">⚔️</span>
+              <h3>Desafio do Módulo</h3>
+              <span class="challenge-badge">Nível: Iniciante</span>
+            </div>
+            <p>
+              Coloque em prática o que aprendeu. Configure um ambiente do zero e escreva um script
+              que mostre informações do seu sistema.
+            </p>
+            <div class="challenge-task">Tarefa:
+1. Crie uma pasta chamada "pythonpath-estudos"
+2. Configure um ambiente virtual com venv ou uv
+3. Crie um arquivo "ambiente.py" que:
+   - Imprime a versão do Python
+   - Imprime o caminho do executável Python
+   - Imprime o sistema operacional
+   - Imprime a data e hora atual
+
+Dica: use os módulos sys, platform e datetime</div>
+            <div class="ch-actions">
+              <button class="btn btn-ghost btn-sm" onclick="getHint('Ambiente Python moderno', 'Criar um script que imprime versão do Python, caminho do executável, SO e data/hora. Módulos: sys, platform, datetime')">
+                💡 Hint da IA
+              </button>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('sol-desafio').classList.toggle('show')">
+                👁️ Ver solução
+              </button>
+            </div>
+            <div class="sol-toggle" id="sol-desafio">
+              <div class="code-block" style="margin-top:.9rem">
+                <div class="code-block-header">
+                  <span class="code-lang">python — ambiente.py</span>
+                  <button class="code-copy" onclick="copyCode(this)">copiar</button>
+                </div>
+                <pre><span class="kw">import</span> sys
+<span class="kw">import</span> platform
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+<span class="bi">print</span>(<span class="st">"=" * 40</span>)
+<span class="bi">print</span>(<span class="st">"🐍 Informações do Ambiente Python"</span>)
+<span class="bi">print</span>(<span class="st">"=" * 40</span>)
+<span class="bi">print</span>(<span class="st">f"Versão Python : {sys.version.split()[0]}"</span>)
+<span class="bi">print</span>(<span class="st">f"Executável    : {sys.executable}"</span>)
+<span class="bi">print</span>(<span class="st">f"Sistema       : {platform.system()} {platform.release()}"</span>)
+<span class="bi">print</span>(<span class="st">f"Data/hora     : {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}"</span>)
+<span class="bi">print</span>(<span class="st">"=" * 40</span>)
+<span class="bi">print</span>(<span class="st">"✅ Ambiente configurado com sucesso!"</span>)</pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- RECURSOS -->
+          <section class="mod-section" id="recursos">
+            <p class="mod-section-eyebrow">08 · para se aprofundar</p>
+            <h2 class="mod-section-title">Recursos e referências</h2>
+            <p>Fontes oficiais e materiais complementares para quando quiser ir além:</p>
+            <div class="resources">
+              <a class="resource-link" href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">
+                <span class="resource-icon">⚡</span>
+                <div class="resource-info">
+                  <span class="resource-title">Documentação oficial do uv</span>
+                  <span class="resource-desc">Guia completo do gerenciador moderno de pacotes Python</span>
+                </div>
+                <span class="resource-arrow">↗</span>
+              </a>
+              <a class="resource-link" href="https://docs.python.org/pt-br/3/library/venv.html" target="_blank" rel="noopener">
+                <span class="resource-icon">📦</span>
+                <div class="resource-info">
+                  <span class="resource-title">Python docs — venv</span>
+                  <span class="resource-desc">Documentação oficial dos ambientes virtuais em português</span>
+                </div>
+                <span class="resource-arrow">↗</span>
+              </a>
+              <a class="resource-link" href="https://github.com/pyenv/pyenv" target="_blank" rel="noopener">
+                <span class="resource-icon">🔄</span>
+                <div class="resource-info">
+                  <span class="resource-title">pyenv no GitHub</span>
+                  <span class="resource-desc">Gerenciador de versões do Python — para quem precisa de múltiplas versões</span>
+                </div>
+                <span class="resource-arrow">↗</span>
+              </a>
+              <a class="resource-link" href="https://marketplace.visualstudio.com/items?itemName=ms-python.python" target="_blank" rel="noopener">
+                <span class="resource-icon">🖥️</span>
+                <div class="resource-info">
+                  <span class="resource-title">Extensão Python para VSCode</span>
+                  <span class="resource-desc">A extensão oficial da Microsoft — imprescindível</span>
+                </div>
+                <span class="resource-arrow">↗</span>
+              </a>
+              <a class="resource-link" href="https://peps.python.org/pep-0008/" target="_blank" rel="noopener">
+                <span class="resource-icon">📖</span>
+                <div class="resource-info">
+                  <span class="resource-title">PEP 8 — Guia de estilo Python</span>
+                  <span class="resource-desc">As convenções de código que toda a comunidade Python segue</span>
+                </div>
+                <span class="resource-arrow">↗</span>
+              </a>
+            </div>
+          </section>
+
+          <!-- Footer de navegação -->
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 0;border-top:1px solid var(--border);margin-top:.5rem">
+            <a href="../trilha.html" class="btn btn-ghost">← Voltar à trilha</a>
+            <a href="02-tipos-dados.html" class="btn btn-primary">Próximo: Tipos de dados →</a>
+          </div>
+
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- AI Widget -->
+  <div class="ai-float">
+    <button class="ai-toggle" onclick="toggleAI()" aria-label="Abrir PyBot">🤖</button>
+    <div class="ai-panel" id="ai-panel" role="dialog">
+      <div class="ai-head">
+        <div class="ai-av">🐍</div>
+        <div><div class="ai-name">PyBot</div><div class="ai-online">● online</div></div>
+      </div>
+      <div class="ai-msgs" id="ai-msgs" aria-live="polite">
+        <div class="ai-msg bot">Estudando o Módulo 01! Tem dúvida sobre instalação, venv ou uv? Me pergunte! 🐍</div>
+      </div>
+      <div class="ai-input-row">
+        <input type="text" class="ai-input" id="ai-inp" placeholder="Dúvida sobre o módulo..." />
+        <button class="ai-send" onclick="sendAI()">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/nav.js"></script>
+  <script>
+    // Scroll spy for TOC
+    const sections = document.querySelectorAll('.mod-section[id], .mod-challenge[id]');
+    const tocItems = document.querySelectorAll('.mod-toc-item');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocItems.forEach(item => item.classList.remove('active'));
+          const active = document.querySelector(`.mod-toc-item[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+
+    // Copy code
+    function copyCode(btn) {
+      const pre = btn.closest('.code-block').querySelector('pre');
+      navigator.clipboard.writeText(pre.innerText).then(() => {
+        btn.textContent = '✓ copiado!';
+        setTimeout(() => btn.textContent = 'copiar', 2000);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -8,6 +8,22 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../assets/css/global.css" />
   <link rel="stylesheet" href="../assets/css/pages.css" />
+  <style>
+    .mod-card { display: block; text-decoration: none; color: inherit; }
+    .mod-card.available:hover .mod-title { color: var(--yellow); }
+    .mod-card-footer { margin-top: .9rem; display: flex; align-items: center; justify-content: space-between; }
+    .mod-cta {
+      font-size: .75rem; font-weight: 700; color: var(--yellow);
+      font-family: var(--font-mono); display: flex; align-items: center; gap: .3rem;
+    }
+    .mod-soon {
+      font-size: .72rem; color: var(--text3);
+      font-family: var(--font-mono); background: var(--bg);
+      padding: .15rem .55rem; border-radius: 100px; border: 1px solid var(--border);
+    }
+    .mod-card.available { cursor: pointer; }
+    .mod-card.unavailable { opacity: .55; cursor: default; pointer-events: none; }
+  </style>
 </head>
 <body>
 
@@ -27,15 +43,15 @@
       <p class="eyebrow">// trilha de aprendizado</p>
       <h1 class="page-title">Sua jornada Python</h1>
       <p class="page-sub">
-        Cada módulo tem contexto de uso real — por que isso importa no mundo real,
-        não só "o que é". Trilha baseada no <a href="https://roadmap.sh/python" target="_blank" rel="noopener" style="color:var(--yellow)">roadmap.sh/python</a>.
+        Cada módulo é uma aula completa — teoria com contexto real, exemplos de código,
+        links de referência e um desafio prático. Clique em qualquer módulo disponível para estudar.
       </p>
 
       <div class="tabs" role="tablist" aria-label="Nível de aprendizado">
-        <button class="tab active" role="tab" aria-selected="true"  onclick="setLevel('iniciante', this)">🌱 Iniciante</button>
-        <button class="tab"        role="tab" aria-selected="false" onclick="setLevel('intermediario', this)">⚡ Intermediário</button>
-        <button class="tab"        role="tab" aria-selected="false" onclick="setLevel('avancado', this)">🔥 Avançado</button>
-        <button class="tab"        role="tab" aria-selected="false" onclick="setLevel('expert', this)">👑 Expert</button>
+        <button class="tab active" role="tab" onclick="setLevel('iniciante', this)">🌱 Iniciante</button>
+        <button class="tab"        role="tab" onclick="setLevel('intermediario', this)">⚡ Intermediário</button>
+        <button class="tab"        role="tab" onclick="setLevel('avancado', this)">🔥 Avançado</button>
+        <button class="tab"        role="tab" onclick="setLevel('expert', this)">👑 Expert</button>
       </div>
 
       <div class="modules-grid" id="modules-grid" role="list"></div>
@@ -69,32 +85,52 @@
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/nav.js"></script>
   <script>
+    // Map module numbers to their page files
+    const MODULE_PAGES = {
+      '01': 'modulos/01-ambiente.html',
+      // More modules added as they're built:
+      // '02': 'modulos/02-tipos-dados.html',
+      // '03': 'modulos/03-operadores.html',
+    };
+
     let currentLevel = 'iniciante';
 
     function setLevel(level, btn) {
       currentLevel = level;
-      document.querySelectorAll('.tab').forEach(t => {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-      });
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
       render();
     }
 
     function render() {
       const grid = document.getElementById('modules-grid');
       const mods = PP.MODULES[currentLevel] || [];
-      grid.innerHTML = mods.map(m => `
-        <article class="mod-card" role="listitem">
-          <div class="mod-num">Módulo ${m.num}</div>
-          <span class="mod-icon" aria-hidden="true">${m.icon}</span>
-          <h2 class="mod-title">${m.title}</h2>
-          <p class="mod-desc">${m.desc}</p>
-          <div class="tags">${m.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-          <div class="mod-real"><strong>🎯 Uso real:</strong> ${m.real}</div>
-        </article>
-      `).join('');
+
+      grid.innerHTML = mods.map(m => {
+        const page = MODULE_PAGES[m.num];
+        const available = !!page;
+        const tag = available
+          ? `<a class="mod-card card available" href="${page}" role="listitem">`
+          : `<div class="mod-card card unavailable" role="listitem">`;
+        const endTag = available ? `</a>` : `</div>`;
+
+        return `
+          ${tag}
+            <div class="mod-num">Módulo ${m.num}</div>
+            <span class="mod-icon" aria-hidden="true">${m.icon}</span>
+            <h2 class="mod-title">${m.title}</h2>
+            <p class="mod-desc">${m.desc}</p>
+            <div class="tags">${m.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+            <div class="mod-real"><strong>🎯 Uso real:</strong> ${m.real}</div>
+            <div class="mod-card-footer">
+              ${available
+                ? `<span class="mod-cta">Estudar módulo →</span>`
+                : `<span class="mod-soon">Em breve</span>`
+              }
+            </div>
+          ${endTag}
+        `;
+      }).join('');
     }
 
     render();
