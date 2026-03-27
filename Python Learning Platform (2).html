@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PythonPath — Aprenda Python do Zero ao Avançado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #18181f;
+    --surface: #1e1e28;
+    --surface2: #252530;
+    --border: #2a2a38;
+    --border2: #333345;
+    --py-yellow: #ffd43b;
+    --py-blue: #4b8bbe;
+    --py-blue-light: #6baed6;
+    --accent: #ffd43b;
+    --accent2: #4b8bbe;
+    --green: #69db7c;
+    --red: #ff6b6b;
+    --orange: #ffa94d;
+    --purple: #cc5de8;
+    --text: #e8e8f0;
+    --text2: #9898b0;
+    --text3: #5a5a72;
+    --radius: 12px;
+    --radius2: 8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--py-yellow);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--py-blue-light); }
+
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius2);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+  }
+
+  .hero-glow-1 {
+    background: radial-gradient(circle, rgba(75,139,190,0.18) 0%, transparent 70%);
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hero-glow-2 {
+    background: radial-gradient(circle, rgba(255,212,59,0.1) 0%, transparent 70%);
+    bottom: -100px; right: -100px;
+    width: 400px; height: 400px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    padding: 0.35rem 1rem;
+    font-size: 0.78rem;
+    color: var(--text2);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 2rem;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .hero-title .line1 { display: block; color: var(--text); }
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--py-yellow) 0%, var(--py-blue-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text2);
+    max-width: 480px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeDown 0.6s 0.3s ease both;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.6rem;
+    border-radius: var(--radius2);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: var(--py-yellow);
+    color: #000;
+  }
+
+  .btn-primary:hover {
+    background: #ffe566;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(255,212,59,0.25);
+  }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border2);
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface2);
+    transform: translateY(-1px);
+  }
+
+  /* ── SNAKE DECORATION ── */
+  .hero-snake {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    animation: floatSnake 3s ease-in-out infinite, fadeDown 0.6s ease both;
+    display: block;
+  }
+
+  @keyframes floatSnake {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-12px) rotate(5deg); }
+  }
+
+  /* ── STATS ── */
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    margin-top: 4rem;
+    padding-top: 4rem;
+    border-top: 1px solid var(--border);
+    animation: fadeDown 0.6s 0.4s ease both;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-num {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--py-yellow);
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+  section:not(#hero) { display: none; }
+  section.active { display: block; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--py-blue-light);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-sub {
+    color: var(--text2);
+    font-weight: 300;
+    margin-bottom: 3rem;
+    max-width: 500px;
+  }
+
+  /* ── TRAIL ── */
+  .level-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    background: var(--surface);
+    padding: 0.4rem;
+    border-radius: var(--radius);
+    width: fit-content;
+    border: 1px solid var(--border);
+  }
+
+  .level-tab {
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--radius2);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text2);
+    background: none;
+    border: none;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .level-tab.active {
+    background: var(--bg);
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .level-tab.iniciante.active { color: var(--green); }
+  .level-tab.intermediario.active { color: var(--py-yellow); }
+  .level-tab.avancado.active { color: var(--orange); }
+  .level-tab.expert.active { color: var(--purple); }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .module-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .module-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent-color, transparent) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .module-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  .module-card:hover::before { opacity: 0.04; }
+
+  .module-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text3);
+    margin-bottom: 0.75rem;
+  }
+
+  .module-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+
+  .module-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+
+  .module-desc {
+    font-size: 0.82rem;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .module-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .topic-tag {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── CHALLENGES ── */
+  .challenges-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .challenges-sidebar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: sticky;
+    top: 80px;
+  }
+
+  .sidebar-section {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-section:last-child { border-bottom: none; }
+
+  .sidebar-label {
+    font-size: 0.65rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 0.5rem 0.75rem 0.25rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .sidebar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius2);
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.83rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+  }
+
+  .sidebar-btn:hover { background: var(--bg); color: var(--text); }
+  .sidebar-btn.active { background: var(--bg); color: var(--text); }
+
+  .sidebar-btn .badge {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    color: var(--text3);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .challenges-main { display: flex; flex-direction: column; gap: 1rem; }
+
+  .challenge-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .challenge-card:hover { border-color: var(--border2); }
+
+  .challenge-header {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    cursor: pointer;
+  }
+
+  .diff-badge {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 100px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .diff-badge.facil { background: rgba(105,219,124,0.15); color: var(--green); border: 1px solid rgba(105,219,124,0.3); }
+  .diff-badge.medio { background: rgba(255,212,59,0.15); color: var(--py-yellow); border: 1px solid rgba(255,212,59,0.3); }
+  .diff-badge.dificil { background: rgba(255,107,107,0.15); color: var(--red); border: 1px solid rgba(255,107,107,0.3); }
+
+  .challenge-info { flex: 1; }
+
+  .challenge-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: var(--text);
+  }
+
+  .challenge-desc {
+    font-size: 0.82rem;
+    color: var(--text2);
+    font-weight: 300;
+  }
+
+  .challenge-arrow {
+    color: var(--text3);
+    transition: transform 0.2s;
+    font-size: 0.8rem;
+    padding-top: 0.2rem;
+  }
+
+  .challenge-card.open .challenge-arrow { transform: rotate(90deg); }
+
+  .challenge-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .challenge-card.open .challenge-body { display: block; }
+
+  .challenge-body-inner { padding: 1.5rem; }
+
+  .challenge-problem {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius2);
+    padding: 1rem 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--py-blue);
+  }
+
+  .challenge-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-hint {
+    background: rgba(75,139,190,0.15);
+    color: var(--py-blue-light);
+    border: 1px solid rgba(75,139,190,0.3);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius2);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .btn-hint:hover { background: rgba(75,139,190,0.25); }
+
+  .btn-solution {
+    background: rgba(105,219,124,0.1);
+    color: var(--green);
+    border: 1px solid rgba(105,219,124,0.25);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius2);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .btn-solution:hover { background: rgba(105,219,124,0.18); }
+
+  .solution-block {
+    display: none;
+    margin-top: 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius2);
+    overflow: hidden;
+  }
+
+  .solution-block.visible { display: block; }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-lang {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--py-yellow);
+  }
+
+  .code-copy {
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    transition: color 0.2s;
+  }
+
+  .code-copy:hover { color: var(--text); }
+
+  pre {
+    padding: 1.25rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: var(--text);
+  }
+
+  .py-kw { color: #cc99cd; }
+  .py-fn { color: #6baed6; }
+  .py-str { color: #7ec699; }
+  .py-num { color: #f08d49; }
+  .py-cm { color: #5a5a72; font-style: italic; }
+  .py-builtin { color: #ffd43b; }
+
+  /* ── AI COMPANION ── */
+  .ai-companion {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 200;
+  }
+
+  .ai-toggle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--py-yellow);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 20px rgba(255,212,59,0.4);
+    transition: all 0.2s;
+  }
+
+  .ai-toggle:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(255,212,59,0.5); }
+
+  .ai-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 360px;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    animation: slideUp 0.2s ease;
+  }
+
+  .ai-panel.open { display: flex; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ai-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .ai-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--py-yellow), var(--py-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .ai-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .ai-status {
+    font-size: 0.72rem;
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .ai-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 300px;
+    min-height: 150px;
+  }
+
+  .ai-msg {
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius2);
+    font-size: 0.83rem;
+    line-height: 1.5;
+    max-width: 90%;
+  }
+
+  .ai-msg.from-ai {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    align-self: flex-start;
+  }
+
+  .ai-msg.from-user {
+    background: rgba(255,212,59,0.12);
+    color: var(--text);
+    border: 1px solid rgba(255,212,59,0.2);
+    align-self: flex-end;
+  }
+
+  .ai-msg.typing {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    align-self: flex-start;
+    color: var(--text3);
+  }
+
+  .ai-input-area {
+    padding: 0.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .ai-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius2);
+    padding: 0.55rem 0.85rem;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.83rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .ai-input:focus { border-color: var(--py-yellow); }
+  .ai-input::placeholder { color: var(--text3); }
+
+  .ai-send {
+    background: var(--py-yellow);
+    border: none;
+    border-radius: var(--radius2);
+    width: 36px; height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .ai-send:hover { background: #ffe566; }
+
+  .api-key-area {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .api-key-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius2);
+    padding: 0.45rem 0.75rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text2);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .api-key-input:focus { border-color: var(--py-blue); }
+  .api-key-input::placeholder { color: var(--text3); }
+
+  .api-key-save {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius2);
+    padding: 0.4rem 0.75rem;
+    font-size: 0.72rem;
+    color: var(--text2);
+    cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .api-key-save:hover { color: var(--text); background: var(--bg2); }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle at top right, var(--card-color, rgba(255,212,59,0.08)) 0%, transparent 70%);
+  }
+
+  .project-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  .project-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+
+  .project-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .project-desc {
+    font-size: 0.83rem;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .project-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .skill-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── FLASHCARDS ── */
+  .flashcards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .flashcard {
+    height: 180px;
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  .flashcard-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease;
+  }
+
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .flashcard-front {
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .flashcard-back {
+    background: var(--bg2);
+    border: 1px solid var(--py-yellow);
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-q {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .flashcard-hint {
+    font-size: 0.75rem;
+    color: var(--text3);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .flashcard-a {
+    font-size: 0.83rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .flashcard-a code {
+    font-family: 'Space Mono', monospace;
+    color: var(--py-yellow);
+    font-size: 0.8rem;
+    background: var(--bg);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text3);
+  }
+
+  .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+  .empty-state p { font-size: 0.9rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text3);
+    font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  footer a { color: var(--py-blue-light); text-decoration: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .challenges-layout { grid-template-columns: 1fr; }
+    .challenges-sidebar { position: static; }
+    .hero-title { letter-spacing: -1px; }
+    .ai-panel { width: 300px; right: -0.5rem; }
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 0; }
+    .nav-links a { padding: 0.4rem 0.5rem; font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo" onclick="showSection('hero')">Python<span>Path</span></a>
+  <ul class="nav-links">
+    <li><a onclick="showSection('trilha')" id="nav-trilha">Trilha</a></li>
+    <li><a onclick="showSection('desafios')" id="nav-desafios">Desafios</a></li>
+    <li><a onclick="showSection('projetos')" id="nav-projetos">Projetos</a></li>
+    <li><a onclick="showSection('revisao')" id="nav-revisao">Revisão</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero" class="active" style="max-width:100%;padding-top:5rem;">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <span class="hero-snake">🐍</span>
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Plataforma em desenvolvimento ativo
+  </div>
+  <h1 class="hero-title">
+    <span class="line1">Aprenda</span>
+    <span class="line2">Python.</span>
+  </h1>
+  <p class="hero-sub">Do zero ao avançado, com projetos reais, desafios práticos e uma IA que te acompanha em cada passo.</p>
+  <div class="hero-cta">
+    <button class="btn btn-primary" onclick="showSection('trilha')">Começar agora →</button>
+    <button class="btn btn-secondary" onclick="showSection('desafios')">Ver desafios</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">4</span>
+      <span class="stat-label">Níveis</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">30+</span>
+      <span class="stat-label">Módulos</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">∞</span>
+      <span class="stat-label">Possibilidades</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRILHA ── -->
+<section id="trilha">
+  <p class="section-label">// trilha de aprendizado</p>
+  <h2 class="section-title">Sua jornada Python</h2>
+  <p class="section-sub">Módulos organizados por nível, do básico absoluto ao desenvolvimento profissional.</p>
+
+  <div class="level-tabs">
+    <button class="level-tab iniciante active" onclick="setLevel('iniciante', this)">🌱 Iniciante</button>
+    <button class="level-tab intermediario" onclick="setLevel('intermediario', this)">⚡ Intermediário</button>
+    <button class="level-tab avancado" onclick="setLevel('avancado', this)">🔥 Avançado</button>
+    <button class="level-tab expert" onclick="setLevel('expert', this)">👑 Expert</button>
+  </div>
+
+  <div class="modules-grid" id="modules-grid"></div>
+</section>
+
+<!-- ── DESAFIOS ── -->
+<section id="desafios">
+  <p class="section-label">// desafios práticos</p>
+  <h2 class="section-title">Pratique com propósito</h2>
+  <p class="section-sub">Desafios reais, progressivos, com hints inteligentes e soluções comentadas.</p>
+
+  <div class="challenges-layout">
+    <div class="challenges-sidebar">
+      <div class="sidebar-section">
+        <p class="sidebar-label">Dificuldade</p>
+        <button class="sidebar-btn active" onclick="filterChallenges('todos', this)">Todos <span class="badge" id="cnt-todos">0</span></button>
+        <button class="sidebar-btn" onclick="filterChallenges('facil', this)">🟢 Fácil <span class="badge" id="cnt-facil">0</span></button>
+        <button class="sidebar-btn" onclick="filterChallenges('medio', this)">🟡 Médio <span class="badge" id="cnt-medio">0</span></button>
+        <button class="sidebar-btn" onclick="filterChallenges('dificil', this)">🔴 Difícil <span class="badge" id="cnt-dificil">0</span></button>
+      </div>
+      <div class="sidebar-section">
+        <p class="sidebar-label">Tema</p>
+        <button class="sidebar-btn" onclick="filterChallenges('strings', this)">Strings</button>
+        <button class="sidebar-btn" onclick="filterChallenges('listas', this)">Listas</button>
+        <button class="sidebar-btn" onclick="filterChallenges('logica', this)">Lógica</button>
+        <button class="sidebar-btn" onclick="filterChallenges('funcoes', this)">Funções</button>
+        <button class="sidebar-btn" onclick="filterChallenges('oop', this)">OOP</button>
+        <button class="sidebar-btn" onclick="filterChallenges('algoritmos', this)">Algoritmos</button>
+      </div>
+    </div>
+    <div class="challenges-main" id="challenges-list"></div>
+  </div>
+</section>
+
+<!-- ── PROJETOS ── -->
+<section id="projetos">
+  <p class="section-label">// ideias de projetos</p>
+  <h2 class="section-title">Construa algo real</h2>
+  <p class="section-sub">Projetos organizados por nível. Cada um te ensina algo que importa de verdade.</p>
+  <div class="projects-grid" id="projects-grid"></div>
+</section>
+
+<!-- ── REVISÃO ── -->
+<section id="revisao">
+  <p class="section-label">// flashcards de revisão</p>
+  <h2 class="section-title">Fixe o conhecimento</h2>
+  <p class="section-sub">Clique nos cards para revelar a resposta. Revisão ativa é o método que funciona.</p>
+  <div class="flashcards-grid" id="flashcards-grid"></div>
+</section>
+
+<!-- ── AI COMPANION ── -->
+<div class="ai-companion">
+  <button class="ai-toggle" onclick="toggleAI()" title="Assistente Python IA">🤖</button>
+  <div class="ai-panel" id="ai-panel">
+    <div class="ai-header">
+      <div class="ai-avatar">🐍</div>
+      <div>
+        <div class="ai-name">PyBot</div>
+        <div class="ai-status">● online</div>
+      </div>
+    </div>
+    <div class="api-key-area">
+      <input type="password" class="api-key-input" id="api-key-input" placeholder="sk-ant-... (sua Anthropic API key)">
+      <button class="api-key-save" onclick="saveApiKey()">Salvar</button>
+    </div>
+    <div class="ai-messages" id="ai-messages">
+      <div class="ai-msg from-ai">Olá! Sou o PyBot 🐍 Pode me perguntar qualquer coisa sobre Python — conceitos, erros, dúvidas de exercícios!</div>
+    </div>
+    <div class="ai-input-area">
+      <input type="text" class="ai-input" id="ai-input" placeholder="Pergunta sobre Python..." onkeydown="if(event.key==='Enter') sendAI()">
+      <button class="ai-send" onclick="sendAI()">↑</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>PythonPath — feito com 🐍 e ☕ &nbsp;|&nbsp; Trilha baseada em <a href="https://roadmap.sh/python" target="_blank">roadmap.sh/python</a></p>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+//  DATA
+// ─────────────────────────────────────────────
+
+const MODULES = {
+  iniciante: [
+    { num: '01', icon: '🖥️', title: 'Introdução ao Python', desc: 'Instale o ambiente, entenda a filosofia Python e escreva seu primeiro programa.', topics: ['instalação', 'REPL', 'hello world', 'PEP 8'] },
+    { num: '02', icon: '📦', title: 'Variáveis e Tipos', desc: 'int, float, str, bool — os blocos fundamentais de qualquer programa Python.', topics: ['int', 'float', 'str', 'bool', 'type()'] },
+    { num: '03', icon: '⚙️', title: 'Operadores e Expressões', desc: 'Aritmética, comparação, lógica e como Python avalia expressões.', topics: ['aritméticos', 'comparação', 'lógicos', 'precedência'] },
+    { num: '04', icon: '🔀', title: 'Controle de Fluxo', desc: 'if, elif, else — faça seu código tomar decisões.', topics: ['if', 'elif', 'else', 'match-case'] },
+    { num: '05', icon: '🔁', title: 'Loops', desc: 'for e while para repetir tarefas. break, continue e o else do loop.', topics: ['for', 'while', 'range()', 'break', 'continue'] },
+    { num: '06', icon: '📋', title: 'Listas e Tuplas', desc: 'Coleções ordenadas — os tipos de dados mais usados no dia a dia.', topics: ['list', 'tuple', 'slicing', 'métodos', 'compreensão'] },
+    { num: '07', icon: '🗂️', title: 'Dicionários e Sets', desc: 'Estruturas chave-valor e conjuntos para dados únicos.', topics: ['dict', 'set', 'keys', 'values', 'items'] },
+    { num: '08', icon: '🔧', title: 'Funções', desc: 'Organize o código com funções — parâmetros, retorno e escopo.', topics: ['def', 'return', 'args', 'kwargs', 'escopo'] },
+    { num: '09', icon: '💥', title: 'Erros e Exceções', desc: 'Trate erros de forma elegante com try, except e finally.', topics: ['try', 'except', 'finally', 'raise', 'tipos de erro'] },
+    { num: '10', icon: '📁', title: 'Arquivos e I/O', desc: 'Leia e escreva arquivos. Trabalhe com JSON e CSV.', topics: ['open()', 'read()', 'write()', 'json', 'csv'] },
+  ],
+  intermediario: [
+    { num: '11', icon: '🏗️', title: 'OOP — Classes e Objetos', desc: 'Orientação a objetos do zero: atributos, métodos e instâncias.', topics: ['class', '__init__', 'self', 'métodos', 'atributos'] },
+    { num: '12', icon: '🧬', title: 'Herança e Polimorfismo', desc: 'Estenda classes, override métodos e entenda o MRO do Python.', topics: ['herança', 'super()', 'polimorfismo', 'MRO', 'ABC'] },
+    { num: '13', icon: '✨', title: 'Métodos Especiais', desc: 'Dunder methods: __str__, __repr__, __len__, __eq__ e mais.', topics: ['__str__', '__repr__', '__len__', '__eq__', 'dunder'] },
+    { num: '14', icon: '🎭', title: 'Decorators', desc: 'Funções que modificam funções. Um dos recursos mais poderosos do Python.', topics: ['@decorator', 'functools', 'wraps', 'classmethod', 'staticmethod'] },
+    { num: '15', icon: '⚡', title: 'Generators e Iterators', desc: 'Processamento lazy com yield — eficiência de memória na prática.', topics: ['yield', 'generator', 'iterator', '__iter__', '__next__'] },
+    { num: '16', icon: '🧩', title: 'Módulos e Pacotes', desc: 'Organize projetos com módulos, __init__.py e estrutura de pacotes.', topics: ['import', 'from', '__init__', 'namespace', 'pip'] },
+    { num: '17', icon: '🔍', title: 'Comprehensions Avançadas', desc: 'List, dict, set e generator comprehensions para código mais Pythônico.', topics: ['list comp', 'dict comp', 'set comp', 'gen expr', 'walrus :='] },
+    { num: '18', icon: '📊', title: 'Bibliotecas Essenciais', desc: 'datetime, collections, itertools, functools — o stdlib que todo dev precisa.', topics: ['datetime', 'collections', 'itertools', 'functools', 'pathlib'] },
+  ],
+  avancado: [
+    { num: '19', icon: '🧵', title: 'Concorrência — Threads', desc: 'threading, multiprocessing e o GIL: quando usar cada abordagem.', topics: ['threading', 'multiprocessing', 'GIL', 'Lock', 'Queue'] },
+    { num: '20', icon: '⚡', title: 'Async/Await', desc: 'Programação assíncrona com asyncio para I/O-bound tasks.', topics: ['asyncio', 'async', 'await', 'event loop', 'aiohttp'] },
+    { num: '21', icon: '🗄️', title: 'Bancos de Dados', desc: 'SQLite, PostgreSQL com psycopg2 e ORMs — SQLAlchemy e Peewee.', topics: ['sqlite3', 'psycopg2', 'SQLAlchemy', 'migrations', 'ORM'] },
+    { num: '22', icon: '🌐', title: 'APIs com FastAPI', desc: 'Crie APIs REST modernas com tipagem, validação automática e docs.', topics: ['FastAPI', 'Pydantic', 'routers', 'middlewares', 'OpenAPI'] },
+    { num: '23', icon: '🧪', title: 'Testes com pytest', desc: 'TDD, fixtures, mocking e coverage — qualidade de código profissional.', topics: ['pytest', 'fixtures', 'mock', 'parametrize', 'coverage'] },
+    { num: '24', icon: '📦', title: 'Packaging e Deploy', desc: 'pyproject.toml, poetry, Docker e CI/CD para projetos Python.', topics: ['poetry', 'pyproject.toml', 'Docker', 'GitHub Actions', 'PyPI'] },
+  ],
+  expert: [
+    { num: '25', icon: '🔬', title: 'Metaclasses', desc: 'Classes de classes — o meta-nível da OOP em Python.', topics: ['type()', 'metaclass', '__new__', '__init_subclass__', 'ABCMeta'] },
+    { num: '26', icon: '📈', title: 'Data Science Stack', desc: 'NumPy, Pandas, Matplotlib e Seaborn para análise de dados.', topics: ['numpy', 'pandas', 'matplotlib', 'seaborn', 'jupyter'] },
+    { num: '27', icon: '🤖', title: 'Machine Learning', desc: 'scikit-learn, pipelines, cross-validation e modelos clássicos.', topics: ['sklearn', 'pipeline', 'cross-val', 'GridSearch', 'métricas'] },
+    { num: '28', icon: '🧠', title: 'LLMs e IA Generativa', desc: 'Anthropic SDK, LangChain, RAG e integração com APIs de LLMs.', topics: ['anthropic', 'langchain', 'RAG', 'embeddings', 'prompts'] },
+    { num: '29', icon: '⚙️', title: 'Performance e Profiling', desc: 'cProfile, line_profiler, Cython e Numba para código de alto desempenho.', topics: ['cProfile', 'line_profiler', 'Cython', 'Numba', 'memray'] },
+    { num: '30', icon: '🏆', title: 'Projeto Final: Open Source', desc: 'Contribua para um projeto open source real — do issue à pull request.', topics: ['git', 'fork', 'PR', 'code review', 'CI/CD'] },
+  ]
+};
+
+const CHALLENGES = [
+  { id: 1, title: 'Verificador de Palíndromo', diff: 'facil', tema: 'strings', desc: 'Escreva uma função que verifica se uma string é um palíndromo, ignorando espaços e maiúsculas/minúsculas.', problem: 'Crie a função `is_palindrome(text)` que retorna True se o texto for um palíndromo.\n\nExemplos:\nis_palindrome("racecar") → True\nis_palindrome("A man a plan a canal Panama") → True\nis_palindrome("hello") → False', solution: `<span class="py-kw">def</span> <span class="py-fn">is_palindrome</span>(text):
+    <span class="py-cm"># Limpa: minúsculas e só letras</span>
+    clean = <span class="py-str">''</span>.join(c.lower() <span class="py-kw">for</span> c <span class="py-kw">in</span> text <span class="py-kw">if</span> c.isalpha())
+    <span class="py-kw">return</span> clean == clean[::<span class="py-num">-1</span>]
+
+<span class="py-cm"># Teste</span>
+<span class="py-builtin">print</span>(<span class="py-fn">is_palindrome</span>(<span class="py-str">"racecar"</span>))       <span class="py-cm"># True</span>
+<span class="py-builtin">print</span>(<span class="py-fn">is_palindrome</span>(<span class="py-str">"A man a plan a canal Panama"</span>))  <span class="py-cm"># True</span>
+<span class="py-builtin">print</span>(<span class="py-fn">is_palindrome</span>(<span class="py-str">"hello"</span>))         <span class="py-cm"># False</span>` },
+
+  { id: 2, title: 'Contador de Palavras', diff: 'facil', tema: 'strings', desc: 'Conte a frequência de cada palavra em um texto e retorne as N mais comuns.', problem: 'Crie a função `top_words(text, n)` que retorna as n palavras mais frequentes do texto como lista de tuplas (palavra, contagem).\n\nExemplo:\ntop_words("o gato comeu o rato o gato", 2) → [("o", 3), ("gato", 2)]', solution: `<span class="py-kw">from</span> collections <span class="py-kw">import</span> Counter
+
+<span class="py-kw">def</span> <span class="py-fn">top_words</span>(text, n):
+    words = text.lower().split()
+    counter = <span class="py-fn">Counter</span>(words)
+    <span class="py-kw">return</span> counter.most_common(n)
+
+<span class="py-cm"># Teste</span>
+resultado = <span class="py-fn">top_words</span>(<span class="py-str">"o gato comeu o rato o gato"</span>, <span class="py-num">2</span>)
+<span class="py-builtin">print</span>(resultado)  <span class="py-cm"># [('o', 3), ('gato', 2)]</span>` },
+
+  { id: 3, title: 'FizzBuzz Estendido', diff: 'facil', tema: 'logica', desc: 'O clássico FizzBuzz, mas com regras customizáveis via dicionário.', problem: 'Crie a função `fizzbuzz(n, rules)` onde rules é um dict {divisor: palavra}.\n\nExemplo:\nfizzbuzz(15, {3: "Fizz", 5: "Buzz"})\n→ [1, 2, "Fizz", 4, "Buzz", "Fizz", 7, 8, "Fizz", "Buzz", 11, "Fizz", 13, 14, "FizzBuzz"]', solution: `<span class="py-kw">def</span> <span class="py-fn">fizzbuzz</span>(n, rules):
+    result = []
+    <span class="py-kw">for</span> i <span class="py-kw">in</span> <span class="py-builtin">range</span>(<span class="py-num">1</span>, n + <span class="py-num">1</span>):
+        word = <span class="py-str">''</span>
+        <span class="py-kw">for</span> divisor, label <span class="py-kw">in</span> <span class="py-builtin">sorted</span>(rules.items()):
+            <span class="py-kw">if</span> i % divisor == <span class="py-num">0</span>:
+                word += label
+        result.append(word <span class="py-kw">if</span> word <span class="py-kw">else</span> i)
+    <span class="py-kw">return</span> result
+
+<span class="py-builtin">print</span>(<span class="py-fn">fizzbuzz</span>(<span class="py-num">15</span>, {<span class="py-num">3</span>: <span class="py-str">"Fizz"</span>, <span class="py-num">5</span>: <span class="py-str">"Buzz"</span>}))` },
+
+  { id: 4, title: 'Achatar Lista Aninhada', diff: 'medio', tema: 'listas', desc: 'Transforme uma lista com qualquer nível de aninhamento em uma lista plana usando recursão.', problem: 'Crie a função `flatten(lst)` que achata qualquer lista aninhada.\n\nExemplos:\nflatten([1, [2, 3], [4, [5, 6]]]) → [1, 2, 3, 4, 5, 6]\nflatten([1, [2, [3, [4, [5]]]]]) → [1, 2, 3, 4, 5]', solution: `<span class="py-kw">def</span> <span class="py-fn">flatten</span>(lst):
+    result = []
+    <span class="py-kw">for</span> item <span class="py-kw">in</span> lst:
+        <span class="py-kw">if</span> <span class="py-builtin">isinstance</span>(item, <span class="py-builtin">list</span>):
+            result.extend(<span class="py-fn">flatten</span>(item))  <span class="py-cm"># recursão!</span>
+        <span class="py-kw">else</span>:
+            result.append(item)
+    <span class="py-kw">return</span> result
+
+<span class="py-cm"># Versão pythônica com generator:</span>
+<span class="py-kw">def</span> <span class="py-fn">flatten_gen</span>(lst):
+    <span class="py-kw">for</span> item <span class="py-kw">in</span> lst:
+        <span class="py-kw">if</span> <span class="py-builtin">isinstance</span>(item, <span class="py-builtin">list</span>):
+            <span class="py-kw">yield from</span> <span class="py-fn">flatten_gen</span>(item)
+        <span class="py-kw">else</span>:
+            <span class="py-kw">yield</span> item` },
+
+  { id: 5, title: 'Cache LRU Manual', diff: 'medio', tema: 'funcoes', desc: 'Implemente um decorator de cache com tamanho máximo sem usar functools.lru_cache.', problem: 'Crie o decorator `lru_cache(max_size)` que armazena os últimos max_size resultados de uma função.\n\nUse um dict OrderedDict para manter a ordem de uso e evicção do mais antigo quando cheio.', solution: `<span class="py-kw">from</span> collections <span class="py-kw">import</span> OrderedDict
+
+<span class="py-kw">def</span> <span class="py-fn">lru_cache</span>(max_size=<span class="py-num">128</span>):
+    <span class="py-kw">def</span> <span class="py-fn">decorator</span>(func):
+        cache = <span class="py-fn">OrderedDict</span>()
+        
+        <span class="py-kw">def</span> <span class="py-fn">wrapper</span>(*args):
+            <span class="py-kw">if</span> args <span class="py-kw">in</span> cache:
+                cache.move_to_end(args)  <span class="py-cm"># mais recente</span>
+                <span class="py-kw">return</span> cache[args]
+            
+            result = <span class="py-fn">func</span>(*args)
+            cache[args] = result
+            
+            <span class="py-kw">if</span> <span class="py-builtin">len</span>(cache) > max_size:
+                cache.popitem(last=<span class="py-kw">False</span>)  <span class="py-cm"># remove o mais antigo</span>
+            
+            <span class="py-kw">return</span> result
+        <span class="py-kw">return</span> wrapper
+    <span class="py-kw">return</span> decorator
+
+<span class="py-cm">@lru_cache(max_size=3)</span>
+<span class="py-kw">def</span> <span class="py-fn">fib</span>(n):
+    <span class="py-kw">return</span> n <span class="py-kw">if</span> n < <span class="py-num">2</span> <span class="py-kw">else</span> <span class="py-fn">fib</span>(n-<span class="py-num">1</span>) + <span class="py-fn">fib</span>(n-<span class="py-num">2</span>)` },
+
+  { id: 6, title: 'Sistema de Eventos', diff: 'medio', tema: 'oop', desc: 'Implemente um EventEmitter com on(), off() e emit() usando OOP.', problem: 'Crie a classe `EventEmitter` com:\n- on(event, callback): registra um listener\n- off(event, callback): remove um listener\n- emit(event, *args): chama todos os listeners do evento\n\nUse dict para armazenar eventos.', solution: `<span class="py-kw">class</span> <span class="py-fn">EventEmitter</span>:
+    <span class="py-kw">def</span> <span class="py-fn">__init__</span>(self):
+        self._listeners = {}
+    
+    <span class="py-kw">def</span> <span class="py-fn">on</span>(self, event, callback):
+        <span class="py-kw">if</span> event <span class="py-kw">not in</span> self._listeners:
+            self._listeners[event] = []
+        self._listeners[event].append(callback)
+        <span class="py-kw">return</span> self  <span class="py-cm"># chaining</span>
+    
+    <span class="py-kw">def</span> <span class="py-fn">off</span>(self, event, callback):
+        <span class="py-kw">if</span> event <span class="py-kw">in</span> self._listeners:
+            self._listeners[event].remove(callback)
+    
+    <span class="py-kw">def</span> <span class="py-fn">emit</span>(self, event, *args):
+        <span class="py-kw">for</span> cb <span class="py-kw">in</span> self._listeners.get(event, []):
+            <span class="py-fn">cb</span>(*args)
+
+emitter = <span class="py-fn">EventEmitter</span>()
+emitter.on(<span class="py-str">"data"</span>, <span class="py-kw">lambda</span> x: <span class="py-builtin">print</span>(<span class="py-str">f"recebido: {x}"</span>))
+emitter.emit(<span class="py-str">"data"</span>, <span class="py-str">"hello"</span>)  <span class="py-cm"># recebido: hello</span>` },
+
+  { id: 7, title: 'Busca Binária', diff: 'medio', tema: 'algoritmos', desc: 'Implemente busca binária iterativa e recursiva com análise de complexidade.', problem: 'Crie duas versões da função `binary_search(arr, target)`:\n1. Iterativa\n2. Recursiva\n\nAmbas retornam o índice do target ou -1 se não encontrado.\nA lista estará sempre ordenada.', solution: `<span class="py-cm"># Iterativa — O(log n)</span>
+<span class="py-kw">def</span> <span class="py-fn">binary_search</span>(arr, target):
+    left, right = <span class="py-num">0</span>, <span class="py-builtin">len</span>(arr) - <span class="py-num">1</span>
+    <span class="py-kw">while</span> left <= right:
+        mid = (left + right) // <span class="py-num">2</span>
+        <span class="py-kw">if</span> arr[mid] == target:
+            <span class="py-kw">return</span> mid
+        <span class="py-kw">elif</span> arr[mid] < target:
+            left = mid + <span class="py-num">1</span>
+        <span class="py-kw">else</span>:
+            right = mid - <span class="py-num">1</span>
+    <span class="py-kw">return</span> <span class="py-num">-1</span>
+
+<span class="py-cm"># Recursiva</span>
+<span class="py-kw">def</span> <span class="py-fn">binary_search_r</span>(arr, target, left=<span class="py-num">0</span>, right=<span class="py-kw">None</span>):
+    <span class="py-kw">if</span> right <span class="py-kw">is None</span>: right = <span class="py-builtin">len</span>(arr) - <span class="py-num">1</span>
+    <span class="py-kw">if</span> left > right: <span class="py-kw">return</span> <span class="py-num">-1</span>
+    mid = (left + right) // <span class="py-num">2</span>
+    <span class="py-kw">if</span> arr[mid] == target: <span class="py-kw">return</span> mid
+    <span class="py-kw">elif</span> arr[mid] < target:
+        <span class="py-kw">return</span> <span class="py-fn">binary_search_r</span>(arr, target, mid+<span class="py-num">1</span>, right)
+    <span class="py-kw">else</span>:
+        <span class="py-kw">return</span> <span class="py-fn">binary_search_r</span>(arr, target, left, mid-<span class="py-num">1</span>)` },
+
+  { id: 8, title: 'Validador de Expressões', diff: 'dificil', tema: 'algoritmos', desc: 'Verifique se parênteses, colchetes e chaves estão balanceados usando uma pilha.', problem: 'Crie a função `is_balanced(expression)` que retorna True se todos os pares de brackets estão corretamente balanceados e aninhados.\n\nExemplos:\nis_balanced("({[]})") → True\nis_balanced("([)]") → False\nis_balanced("{[}") → False', solution: `<span class="py-kw">def</span> <span class="py-fn">is_balanced</span>(expression):
+    stack = []
+    pairs = {<span class="py-str">')'</span>: <span class="py-str">'('</span>, <span class="py-str">']'</span>: <span class="py-str">'['</span>, <span class="py-str">'}'</span>: <span class="py-str">'{'</span>}
+    openers = <span class="py-builtin">set</span>(pairs.values())
+    
+    <span class="py-kw">for</span> char <span class="py-kw">in</span> expression:
+        <span class="py-kw">if</span> char <span class="py-kw">in</span> openers:
+            stack.append(char)
+        <span class="py-kw">elif</span> char <span class="py-kw">in</span> pairs:
+            <span class="py-kw">if not</span> stack <span class="py-kw">or</span> stack[-<span class="py-num">1</span>] != pairs[char]:
+                <span class="py-kw">return False</span>
+            stack.pop()
+    
+    <span class="py-kw">return</span> <span class="py-builtin">len</span>(stack) == <span class="py-num">0</span>
+
+<span class="py-builtin">print</span>(<span class="py-fn">is_balanced</span>(<span class="py-str">"({[]})"</span>))  <span class="py-cm"># True</span>
+<span class="py-builtin">print</span>(<span class="py-fn">is_balanced</span>(<span class="py-str">"([)]"</span>))    <span class="py-cm"># False</span>` },
+
+  { id: 9, title: 'Observer Pattern', diff: 'dificil', tema: 'oop', desc: 'Implemente o padrão Observer com tipagem e suporte a múltiplos eventos por observer.', problem: 'Crie uma implementação completa do Observer Pattern:\n- Classe abstrata `Observer` com método `update()`\n- Classe `Subject` com attach(), detach() e notify()\n- Demonstre com um exemplo de estoque de produtos.', solution: `<span class="py-kw">from</span> abc <span class="py-kw">import</span> ABC, abstractmethod
+
+<span class="py-kw">class</span> <span class="py-fn">Observer</span>(ABC):
+    <span class="py-cm">@abstractmethod</span>
+    <span class="py-kw">def</span> <span class="py-fn">update</span>(self, subject): ...
+
+<span class="py-kw">class</span> <span class="py-fn">Subject</span>:
+    <span class="py-kw">def</span> <span class="py-fn">__init__</span>(self):
+        self._observers: <span class="py-builtin">list</span>[Observer] = []
+        self._state = <span class="py-kw">None</span>
+    
+    <span class="py-kw">def</span> <span class="py-fn">attach</span>(self, obs: Observer): self._observers.append(obs)
+    <span class="py-kw">def</span> <span class="py-fn">detach</span>(self, obs: Observer): self._observers.remove(obs)
+    <span class="py-kw">def</span> <span class="py-fn">notify</span>(self):
+        <span class="py-kw">for</span> obs <span class="py-kw">in</span> self._observers: obs.update(self)
+
+<span class="py-kw">class</span> <span class="py-fn">Estoque</span>(Subject):
+    <span class="py-cm">@property</span>
+    <span class="py-kw">def</span> <span class="py-fn">quantidade</span>(self): <span class="py-kw">return</span> self._state
+    <span class="py-cm">@quantidade.setter</span>
+    <span class="py-kw">def</span> <span class="py-fn">quantidade</span>(self, val):
+        self._state = val
+        self.notify()
+
+<span class="py-kw">class</span> <span class="py-fn">AlertaBaixoEstoque</span>(Observer):
+    <span class="py-kw">def</span> <span class="py-fn">update</span>(self, subject):
+        <span class="py-kw">if</span> subject.quantidade < <span class="py-num">5</span>:
+            <span class="py-builtin">print</span>(<span class="py-str">f"⚠️ Estoque crítico: {subject.quantidade} unidades"</span>)` },
+];
+
+const PROJECTS = [
+  { level: '🌱 Iniciante', color: 'rgba(105,219,124,0.08)', title: 'CLI de Tarefas (To-Do)', desc: 'Crie um gerenciador de tarefas no terminal com criar, listar, completar e deletar tarefas. Salve em JSON.', skills: ['input/output', 'JSON', 'listas', 'loops'] },
+  { level: '🌱 Iniciante', color: 'rgba(105,219,124,0.08)', title: 'Gerador de Senhas', desc: 'Gere senhas seguras com regras configuráveis: comprimento, símbolos, números, maiúsculas.', skills: ['random', 'string', 'funções', 'argparse'] },
+  { level: '🌱 Iniciante', color: 'rgba(105,219,124,0.08)', title: 'Conversor de Unidades', desc: 'Converta entre medidas, moedas e temperaturas via CLI com um menu interativo.', skills: ['dicts', 'funções', 'input', 'formatação'] },
+  { level: '⚡ Intermediário', color: 'rgba(255,212,59,0.08)', title: 'Web Scraper de Notícias', desc: 'Extraia manchetes de portais de notícias com BeautifulSoup e salve em CSV com timestamp.', skills: ['requests', 'BeautifulSoup', 'csv', 'datetime'] },
+  { level: '⚡ Intermediário', color: 'rgba(255,212,59,0.08)', title: 'API REST de Biblioteca', desc: 'Crie uma API com FastAPI para gerenciar livros, autores e empréstimos com SQLite.', skills: ['FastAPI', 'Pydantic', 'SQLite', 'REST'] },
+  { level: '⚡ Intermediário', color: 'rgba(255,212,59,0.08)', title: 'Bot de Telegram', desc: 'Crie um bot com python-telegram-bot que responde comandos e integra com uma API pública.', skills: ['python-telegram-bot', 'async', 'APIs', 'handlers'] },
+  { level: '🔥 Avançado', color: 'rgba(255,107,107,0.08)', title: 'CLI de Monitoramento', desc: 'Dashboard no terminal com Rich que monitora CPU, RAM e processos em tempo real com alertas.', skills: ['psutil', 'Rich', 'asyncio', 'threading'] },
+  { level: '🔥 Avançado', color: 'rgba(255,107,107,0.08)', title: 'Analisador de Logs', desc: 'Parse logs de servidor, detecte padrões, gere relatórios e alertas por email/webhook.', skills: ['regex', 'pandas', 'matplotlib', 'smtplib'] },
+  { level: '👑 Expert', color: 'rgba(204,93,232,0.08)', title: 'Framework de Testes BDD', desc: 'Crie um mini-framework BDD em Python com steps, fixtures e geração de relatório HTML.', skills: ['metaclasses', 'decorators', 'AST', 'Jinja2'] },
+  { level: '👑 Expert', color: 'rgba(204,93,232,0.08)', title: 'RAG com Documentos Locais', desc: 'Sistema de Q&A com seus próprios PDFs usando embeddings, vector store e a API da Anthropic.', skills: ['anthropic', 'embeddings', 'FAISS', 'PyPDF2'] },
+];
+
+const FLASHCARDS = [
+  { q: 'Qual a diferença entre list e tuple?', a: 'List é mutável (pode ser alterada). Tuple é imutável. Use tuple quando os dados não devem mudar — é mais rápida e pode ser usada como chave de dict.' },
+  { q: 'O que é o GIL no Python?', a: 'Global Interpreter Lock — um mutex que só permite uma thread executar bytecode Python por vez. Por isso, threads não aceleram CPU-bound tasks. Use multiprocessing para isso.' },
+  { q: 'Qual a diferença entre == e is?', a: '== compara valores (conteúdo). is compara identidade (se são o mesmo objeto na memória). Exemplo: [1,2] == [1,2] é True, mas [1,2] is [1,2] é False.' },
+  { q: 'O que faz yield em uma função?', a: 'Transforma a função em um generator. Em vez de retornar tudo de uma vez, yields pausam a execução e entregam valores um por vez — economia de memória para grandes sequências.' },
+  { q: 'Quando usar @classmethod vs @staticmethod?', a: '@classmethod recebe cls como primeiro arg e pode acessar/modificar a classe. @staticmethod não recebe cls nem self — é uma função utilitária dentro da classe.' },
+  { q: 'O que é list comprehension?', a: 'Forma pythônica de criar listas: [expr for item in iterable if condition]. Ex: quadrados = [x**2 for x in range(10) if x % 2 == 0]' },
+  { q: 'Diferença entre deepcopy e copy?', a: 'copy() faz cópia rasa: o novo objeto é independente mas subobjetos são compartilhados. deepcopy() copia tudo recursivamente — totalmente independente.' },
+  { q: 'O que são *args e **kwargs?', a: '*args captura argumentos posicionais extras como tuple. **kwargs captura keyword arguments extras como dict. Usados para funções com número variável de parâmetros.' },
+  { q: 'Como funciona o with statement?', a: 'Context manager — chama __enter__ no início e __exit__ no fim, mesmo com erros. Garante limpeza de recursos como arquivos e conexões. Use contextlib.contextmanager para criar os seus.' },
+  { q: 'O que é duck typing?', a: '"Se anda como pato e grasna como pato, é um pato." Python não verifica o tipo explícito — verifica se o objeto tem os métodos/atributos necessários. Favorece composição e flexibilidade.' },
+  { q: 'Diferença entre append() e extend()?', a: 'append() adiciona um único item (que pode ser uma lista). extend() itera sobre o argumento e adiciona cada elemento individualmente. [1,2].extend([3,4]) → [1,2,3,4]' },
+  { q: 'O que são f-strings?', a: 'Forma moderna de formatar strings: f"Olá {nome}, você tem {idade} anos". Suportam expressões, chamadas de método e formatação: f"{valor:.2f}" para 2 casas decimais.' },
+];
+
+// ─────────────────────────────────────────────
+//  NAVIGATION
+// ─────────────────────────────────────────────
+
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─────────────────────────────────────────────
+//  TRILHA
+// ─────────────────────────────────────────────
+
+let currentLevel = 'iniciante';
+
+function setLevel(level, btn) {
+  currentLevel = level;
+  document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderModules();
+}
+
+function renderModules() {
+  const grid = document.getElementById('modules-grid');
+  const mods = MODULES[currentLevel] || [];
+  grid.innerHTML = mods.map(m => `
+    <div class="module-card">
+      <div class="module-num">Módulo ${m.num}</div>
+      <span class="module-icon">${m.icon}</span>
+      <div class="module-title">${m.title}</div>
+      <div class="module-desc">${m.desc}</div>
+      <div class="module-topics">
+        ${m.topics.map(t => `<span class="topic-tag">${t}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────
+//  CHALLENGES
+// ─────────────────────────────────────────────
+
+let currentFilter = 'todos';
+
+function renderChallenges() {
+  const list = document.getElementById('challenges-list');
+  const filtered = currentFilter === 'todos'
+    ? CHALLENGES
+    : CHALLENGES.filter(c => c.diff === currentFilter || c.tema === currentFilter);
+
+  // update counters
+  document.getElementById('cnt-todos').textContent = CHALLENGES.length;
+  ['facil','medio','dificil'].forEach(d => {
+    document.getElementById('cnt-' + d).textContent = CHALLENGES.filter(c => c.diff === d).length;
+  });
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><span class="icon">🔍</span><p>Nenhum desafio nesta categoria ainda.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(c => `
+    <div class="challenge-card" id="ch-${c.id}">
+      <div class="challenge-header" onclick="toggleChallenge(${c.id})">
+        <span class="diff-badge ${c.diff}">${c.diff === 'facil' ? 'Fácil' : c.diff === 'medio' ? 'Médio' : 'Difícil'}</span>
+        <div class="challenge-info">
+          <div class="challenge-title">${c.title}</div>
+          <div class="challenge-desc">${c.desc}</div>
+        </div>
+        <span class="challenge-arrow">▶</span>
+      </div>
+      <div class="challenge-body">
+        <div class="challenge-body-inner">
+          <div class="challenge-problem"><strong>🎯 Desafio:</strong><br><br>${c.problem.replace(/\n/g, '<br>')}</div>
+          <div class="challenge-actions">
+            <button class="btn-hint" onclick="getHint(${c.id}, \`${c.title}\`, \`${c.problem.replace(/`/g, "'")}\`)">💡 Pedir hint à IA</button>
+            <button class="btn-solution" onclick="toggleSolution(${c.id})">👁️ Ver solução</button>
+          </div>
+          <div class="solution-block" id="sol-${c.id}">
+            <div class="code-header">
+              <span class="code-lang">python</span>
+              <button class="code-copy" onclick="copySolution(${c.id})">copiar</button>
+            </div>
+            <pre>${c.solution}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterChallenges(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderChallenges();
+}
+
+function toggleChallenge(id) {
+  const card = document.getElementById('ch-' + id);
+  card.classList.toggle('open');
+}
+
+function toggleSolution(id) {
+  const sol = document.getElementById('sol-' + id);
+  sol.classList.toggle('visible');
+}
+
+function copySolution(id) {
+  const pre = document.querySelector(`#sol-${id} pre`);
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector(`#sol-${id} .code-copy`);
+    btn.textContent = '✓ copiado!';
+    setTimeout(() => btn.textContent = 'copiar', 2000);
+  });
+}
+
+// ─────────────────────────────────────────────
+//  PROJECTS
+// ─────────────────────────────────────────────
+
+function renderProjects() {
+  const grid = document.getElementById('projects-grid');
+  grid.innerHTML = PROJECTS.map(p => `
+    <div class="project-card" style="--card-color: ${p.color}">
+      <div class="project-level">${p.level}</div>
+      <div class="project-title">${p.title}</div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="project-skills">
+        ${p.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────
+//  FLASHCARDS
+// ─────────────────────────────────────────────
+
+function renderFlashcards() {
+  const grid = document.getElementById('flashcards-grid');
+  grid.innerHTML = FLASHCARDS.map((fc, i) => `
+    <div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <div class="flashcard-q">${fc.q}</div>
+          <div class="flashcard-hint">clique para revelar →</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="flashcard-a">${fc.a}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────
+//  AI COMPANION
+// ─────────────────────────────────────────────
+
+let apiKey = localStorage.getItem('pp_api_key') || '';
+let aiOpen = false;
+
+if (apiKey) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('api-key-input');
+    if (input) input.value = '••••••••••••••••';
+  });
+}
+
+function saveApiKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (val && val !== '••••••••••••••••') {
+    apiKey = val;
+    localStorage.setItem('pp_api_key', apiKey);
+    document.getElementById('api-key-input').value = '••••••••••••••••';
+    addAIMessage('from-ai', '✅ API key salva! Agora pode me perguntar qualquer coisa sobre Python.');
+  }
+}
+
+function toggleAI() {
+  aiOpen = !aiOpen;
+  const panel = document.getElementById('ai-panel');
+  panel.classList.toggle('open', aiOpen);
+  if (aiOpen) {
+    const keyInput = document.getElementById('api-key-input');
+    if (apiKey && keyInput.value === '') keyInput.value = '••••••••••••••••';
+    document.getElementById('ai-input').focus();
+  }
+}
+
+function addAIMessage(cls, text) {
+  const msgs = document.getElementById('ai-messages');
+  const div = document.createElement('div');
+  div.className = 'ai-msg ' + cls;
+  div.innerHTML = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+async function sendAI(prompt) {
+  const inputEl = document.getElementById('ai-input');
+  const msg = prompt || inputEl.value.trim();
+  if (!msg) return;
+  if (!apiKey) {
+    addAIMessage('from-ai', '⚠️ Insira sua Anthropic API key acima para usar o PyBot!');
+    return;
+  }
+
+  if (!prompt) inputEl.value = '';
+  addAIMessage('from-user', msg);
+
+  const typing = addAIMessage('typing', '⏳ pensando...');
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        system: `Você é PyBot, um assistente especialista em Python integrado à plataforma PythonPath. 
+Ajude estudantes a aprender Python de forma didática e encorajadora.
+Responda sempre em português brasileiro.
+Seja conciso mas completo. Use exemplos de código quando relevante.
+Formate código com blocos de código markdown quando aplicável.
+Foco: ensinar Python do básico ao avançado.`,
+        messages: [{ role: 'user', content: msg }]
+      })
+    });
+
+    const data = await resp.json();
+    typing.remove();
+
+    if (data.content && data.content[0]) {
+      const text = data.content[0].text;
+      // Format code blocks
+      const formatted = text
+        .replace(/```python\n?([\s\S]*?)```/g, '<pre style="background:var(--bg);padding:0.75rem;border-radius:6px;border:1px solid var(--border);margin-top:0.5rem;overflow-x:auto;font-size:0.75rem">$1</pre>')
+        .replace(/```\n?([\s\S]*?)```/g, '<pre style="background:var(--bg);padding:0.75rem;border-radius:6px;border:1px solid var(--border);margin-top:0.5rem;overflow-x:auto;font-size:0.75rem">$1</pre>')
+        .replace(/`([^`]+)`/g, '<code style="font-family:Space Mono,monospace;color:var(--py-yellow);background:var(--bg);padding:0.1rem 0.35rem;border-radius:3px;font-size:0.8rem">$1</code>')
+        .replace(/\n/g, '<br>');
+      addAIMessage('from-ai', formatted);
+    } else if (data.error) {
+      addAIMessage('from-ai', `❌ Erro: ${data.error.message}`);
+    }
+  } catch (e) {
+    typing.remove();
+    addAIMessage('from-ai', '❌ Erro de conexão. Verifique sua API key e tente novamente.');
+  }
+}
+
+async function getHint(id, title, problem) {
+  if (!apiKey) {
+    toggleAI();
+    addAIMessage('from-ai', '⚠️ Insira sua API key para receber hints da IA!');
+    return;
+  }
+  if (!aiOpen) toggleAI();
+  const prompt = `Estou tentando resolver este desafio Python:\n\nTítulo: ${title}\n\nProblema: ${problem}\n\nMe dê um hint (dica) sem revelar a solução completa. Aponte a direção certa de raciocínio.`;
+  await sendAI(prompt);
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+
+renderModules();
+renderChallenges();
+renderProjects();
+renderFlashcards();
+
+// Restore API key display
+if (apiKey) {
+  document.getElementById('api-key-input').value = '••••••••••••••••';
+}
+</script>
+</body>
+</html>
